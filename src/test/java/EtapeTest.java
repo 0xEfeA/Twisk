@@ -1,7 +1,7 @@
-package test;
+package test.java;
 
-import monde.Activite;
-import monde.Etape;
+import main.java.monde.Activite ;
+import main.java.monde.Etape;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 

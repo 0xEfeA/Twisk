@@ -1,4 +1,4 @@
-package monde;
+package main.java.monde;
 
 import java.util.ArrayList;
 import java.util.Collections;
