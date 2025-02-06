@@ -68,7 +68,10 @@ public class ClientTwisk {
                         world.getLesEtapes().lastEtape().ajouterSuccesseur(guichet);
                     }
                     world.ajouter(guichet, activ);
-                } else {
+                }
+
+
+                else {
                     //Cas d'activité normal
                     if (choixRes.equals("N")) {
 

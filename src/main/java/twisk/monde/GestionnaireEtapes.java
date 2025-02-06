@@ -44,6 +44,7 @@ public class GestionnaireEtapes implements  Iterable<Etape>{
      * Renvoie le derniere element(Etape dans la collection)
      */
     public Etape lastEtape(){
-        return list_etapes.getLast();
+        //return list_etapes.getLast();  //Pour Java 21 +
+        return list_etapes.get(list_etapes.size() - 1);
     }
 }
