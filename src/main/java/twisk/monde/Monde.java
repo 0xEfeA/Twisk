@@ -18,6 +18,10 @@ public class Monde implements Iterable<Etape> {
         return lesEtapes.iterator();
     }
 
+    public GestionnaireEtapes getLesEtapes() {
+        return lesEtapes;
+    }
+
     public void ajouter(Etape... etape) {
 
         lesEtapes.ajouterEtape(etape);
