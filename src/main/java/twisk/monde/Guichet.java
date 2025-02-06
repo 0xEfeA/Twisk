@@ -1,14 +1,35 @@
 package main.java.twisk.monde;
 
-public class Guichet   extends Etape {
-    int nbJetons;
+import java.util.Iterator;
+
+public class Guichet  extends Etape {
+    private int nbJetons;
+
     public Guichet(String nom) {
         super(nom);
     }
-    public Guichet(String nom, int nbJetons) {
-        super(nom);
-        this.nbJetons = nbJetons;
+
+
+    @Override
+    public Iterator<Etape> iterator() {
+        return null;
     }
+
+    @Override
+    public void ajouterSuccesseur(Etape... e) {
+
+    }
+
+    @Override
+    public int nbSuccesseurs() {
+        return 0;
+    }
+
+    @Override
+    public String toString() {
+        return "";
+    }
+
     @Override
     public boolean estUneActivite() {
         return false;
@@ -16,6 +37,6 @@ public class Guichet   extends Etape {
 
     @Override
     public boolean estUnGuichet() {
-        return true;
+        return false;
     }
 }

@@ -1,26 +1,43 @@
 package main.java.twisk.monde;
 
+import java.util.Iterator;
+
 public class Activite extends Etape {
-    int temps;
-    int ecartTemps;
-
-
+    private int temps;
+    private int ecartTemps;
 
     public Activite(String nom) {
         super(nom);
     }
-    public Activite(String nom, int temps, int ecartTemps) {
-        super(nom);
-        this.temps = temps;
-        this.ecartTemps = ecartTemps;
-    }
+
+
     @Override
-   public  boolean estUneActivite() {
-        return  true;
+    public Iterator<Etape> iterator() {
+        return null;
     }
 
     @Override
-   public  boolean estUnGuichet() {
+    public void ajouterSuccesseur(Etape... e) {
+
+    }
+
+    @Override
+    public int nbSuccesseurs() {
+        return 0;
+    }
+
+    @Override
+    public String toString() {
+        return "";
+    }
+
+    @Override
+    public boolean estUneActivite() {
+        return false;
+    }
+
+    @Override
+    public boolean estUnGuichet() {
         return false;
     }
 }
