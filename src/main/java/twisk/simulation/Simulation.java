@@ -10,7 +10,13 @@ public class Simulation {
 
     }
 
+    /**
+     * Affiche le monde sur la sortie standard
+     * @param monde
+     */
     public void simuler(Monde monde){
-        //Affiche simplement le monde sur la sortie standardù
+        for (Etape e : monde.getLesEtapes()){
+            System.out.println(e.toString());
+        }
     }
 }

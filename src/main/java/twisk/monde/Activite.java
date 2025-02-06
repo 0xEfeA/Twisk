@@ -20,7 +20,7 @@ public class Activite extends Etape {
 
     /**
      * Renvoie si oui on non c'est une activité
-     * @return bolleen
+     * @return boolean
      */
     @Override
     public boolean estUneActivite() {
@@ -28,7 +28,7 @@ public class Activite extends Etape {
     }
     /**
      * Renvoie si oui on non c'est une guichet
-     * @return bolleen
+     * @return boolean
      */
     @Override
     public boolean estUnGuichet() {
