@@ -1,5 +1,7 @@
 package main.java.twisk.monde;
 
+import main.java.twisk.outils.FabriqueNumero;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -7,8 +9,11 @@ import java.util.Iterator;
 public abstract class Etape implements Iterable<Etape> {
     // Nom de l'étape
     protected final String nom;
-    // Liste des successeurs de cette étapes
+    // Liste des successeurs de cette étape
    private final ArrayList<Etape> successeurs;
+
+   // Numéro d'étape
+    private int numero;
 
     /**
      * Constructeur
@@ -16,7 +21,9 @@ public abstract class Etape implements Iterable<Etape> {
      */
     public Etape(String nom) {
         this.nom = nom;
-        this.successeurs = new ArrayList<Etape>();
+        this.successeurs = new ArrayList<>();
+        this.numero = FabriqueNumero.getInstance().getNumeroEtape(); // Assignation d'un numéro unique
+
     }
 
     /**
@@ -34,7 +41,7 @@ public abstract class Etape implements Iterable<Etape> {
         Collections.addAll(successeurs, e);
     }
     /**
-     * Renvoie le nombre de successeur de l'étape
+     * Renvoie le nombre de successeurs de l'étape
      * @return Nb successeurs
      */
     public  int nbSuccesseurs(){
@@ -55,14 +62,21 @@ public abstract class Etape implements Iterable<Etape> {
         }
 
     /**
-     * Renvoie si oui on non c'est une activité
+     * Renvoie si oui ou non, c'est une activité
      * @return bolleen
      */
     public abstract boolean estUneActivite();
     /**
-     * Renvoie si oui on non c'est un guichet
+     * Renvoie si oui ou non, c'est un guichet
      * @return bolleen
      */
     public abstract boolean estUnGuichet();
+    /**
+     * @return  le numéro d'étape du guichet
+     */
+    public int getNumeroEtape() {
+        return numero;
+    }
+
 
 }
