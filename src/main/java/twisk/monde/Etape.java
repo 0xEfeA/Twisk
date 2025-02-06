@@ -3,7 +3,7 @@ package main.java.twisk.monde;
 import java.util.Iterator;
 
 public abstract class Etape implements Iterable<Etape> {
-    private final String nom;
+   protected final String nom;
 
 
     public Etape(String nom) {

@@ -1,33 +1,43 @@
 package main.java.twisk.monde;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 
 public class Guichet  extends Etape {
     private int nbJetons;
+    private final ArrayList<Etape> successeurs;
 
     public Guichet(String nom) {
         super(nom);
+        this.successeurs = new ArrayList<>();
     }
 
 
     @Override
     public Iterator<Etape> iterator() {
-        return null;
+        return successeurs.iterator();
     }
 
     @Override
     public void ajouterSuccesseur(Etape... e) {
-
+        Collections.addAll(successeurs, e);
     }
 
     @Override
     public int nbSuccesseurs() {
-        return 0;
+        return successeurs.size();
     }
 
     @Override
     public String toString() {
-        return "";
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.nom).append(": ").append(this.nbSuccesseurs()).append(" - ");
+        sb.append(this.nom).append(": ").append(this.nbSuccesseurs()).append(" successeurs").append(" - ");
+        for (Etape e : successeurs) {
+            sb.append(e.nom).append(", ");
+        }
+        return sb.toString();
     }
 
     @Override
@@ -37,6 +47,6 @@ public class Guichet  extends Etape {
 
     @Override
     public boolean estUnGuichet() {
-        return false;
+        return true;
     }
 }
