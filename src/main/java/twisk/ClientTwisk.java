@@ -36,7 +36,7 @@ public class ClientTwisk {
         if (reponse.equals("O") && nomDuMonde != null && nombreActivities >= 0) {
             //Ajout d'activités normal et Restreinte(Guichet effectivement)
             for (int i = 0; i < nombreActivities; i++) {
-                System.out.println("Quel nom donnez vous à l'activité " + i + 1 + " ?");
+                System.out.println("Quel nom donnez vous à l'activité " + (i+1) + " ?");
                 String nom = scanner.next();
                 System.out.println("Voulez vous que " + nom + " soit Restreinte(O/N)?");
                 String choixRes = scanner.next();
