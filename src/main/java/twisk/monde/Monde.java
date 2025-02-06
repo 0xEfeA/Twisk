@@ -36,4 +36,16 @@ public class Monde implements Iterable<Etape> {
         }
         return nbEtapes;
     }
+
+
+    void aCommmeEntree(Etape... etape) {
+        for (Etape e : etape ){
+            entree.ajouterSuccesseur(e);
+        }
+    }
+    void aCommmeSortie(Etape... etape) {
+        for (Etape e : etape ){
+            e.ajouterSuccesseur(sortie);
+        }
+    }
 }
