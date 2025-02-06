@@ -1,6 +1,6 @@
 package main.java.twisk.monde;
 
-import java.util.Iterator;
+
 
 public class Activite extends Etape {
     private int temps;
@@ -11,29 +11,11 @@ public class Activite extends Etape {
     }
 
 
-    @Override
-    public Iterator<Etape> iterator() {
-        return null;
-    }
 
-    @Override
-    public void ajouterSuccesseur(Etape... e) {
-
-    }
-
-    @Override
-    public int nbSuccesseurs() {
-        return 0;
-    }
-
-    @Override
-    public String toString() {
-        return "";
-    }
 
     @Override
     public boolean estUneActivite() {
-        return false;
+        return true;
     }
 
     @Override
