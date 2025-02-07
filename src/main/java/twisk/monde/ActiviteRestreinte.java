@@ -17,4 +17,5 @@ public class ActiviteRestreinte extends Activite {
     public ActiviteRestreinte(String nom, int temps, int ecart) {
         super(nom);
     }
+
 }

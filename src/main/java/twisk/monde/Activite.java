@@ -29,7 +29,7 @@ public class Activite extends Etape {
 
 
     /**
-     * Renvoie si oui on non c'est une activité
+     * Renvoie si oui ou non c'est une activité
      * @return boolean
      */
     @Override
@@ -37,11 +37,26 @@ public class Activite extends Etape {
         return true;
     }
     /**
-     * Renvoie si oui on non c'est une guichet
+     * Renvoie si oui ou non c'est une guichet
      * @return boolean
      */
     @Override
     public boolean estUnGuichet() {
         return false;
     }
+    /**
+     * Renvoie La durée de l'actvité
+     * @return un entier
+     */
+    public int getTemps() {
+        return temps;
+    }
+    /**
+     * Renvoie Le delta de la durée de l'actvité
+     * @return un entier
+     */
+    public int getEcartTemps() {
+        return ecartTemps;
+    }
+
 }

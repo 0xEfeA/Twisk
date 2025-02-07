@@ -83,6 +83,17 @@ public class Monde implements Iterable<Etape> {
         return lesEtapes.iterator();
     }
 
+
+    /**
+     * Méthode toString de monde qui affiche sous cette forme
+     * Monde :
+     * Entree : "Activtité"
+     * Activité1: 2 successeurs - "Actvité", Guichet,
+     * Activité2 : 1 successeurs - SasSortie,
+     * Activté2: 1 successeurs - "Activité",
+     * Sortie :"Activité"
+     * @return stringbuilder
+     */
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
