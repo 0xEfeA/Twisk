@@ -20,7 +20,7 @@ public class Monde implements Iterable<Etape> {
      * Function qui gère les Etapes qui sont des Entrées
      * @param etape les etapes passé en paramètre
      */
-    public void aCommmeEntree(Etape... etape) {
+    public void aCommeEntree(Etape... etape) {
         for (Etape e : etape ){
             entree.ajouterSuccesseur(e);
         }
@@ -30,7 +30,7 @@ public class Monde implements Iterable<Etape> {
      * Function qui gère les Etapes qui sont des Sortoes
      * @param etape les etapes passé en paramètre
      */
-    public void aCommmeSortie(Etape... etape) {
+    public void aCommeSortie(Etape... etape) {
         for (Etape e : etape ){
             e.ajouterSuccesseur(sortie);
         }

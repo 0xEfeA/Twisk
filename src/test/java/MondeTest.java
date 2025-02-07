@@ -35,8 +35,8 @@ class MondeTest {
         etape.ajouterSuccesseur(etape2, etape3);
         etape3.ajouterSuccesseur( etape2);
 
-        monde.aCommmeEntree(etape);
-        monde.aCommmeSortie(etape2);
+        monde.aCommeEntree(etape);
+        monde.aCommeSortie(etape2);
         monde.ajouter(etape, etape2, etape3);
         System.out.println(monde.toString());
 

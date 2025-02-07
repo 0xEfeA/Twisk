@@ -18,8 +18,8 @@ public class ClientTwisk {
 
         world.ajouter(activite1,guichet,activite2);
 
-        world.aCommmeEntree(activite1);
-        world.aCommmeSortie(activite2);
+        world.aCommeEntree(activite1);
+        world.aCommeSortie(activite2);
 
         return world;
     }
@@ -46,8 +46,8 @@ public class ClientTwisk {
 
         world.ajouter(activite1,activite2,activite3,activite4,guichet1,guichet2);
 
-        world.aCommmeEntree(activite1,guichet1);
-        world.aCommmeSortie(activite3,activite2);
+        world.aCommeEntree(activite1,guichet1);
+        world.aCommeSortie(activite3,activite2);
 
         return world;
     }
