@@ -15,8 +15,6 @@ public class Simulation {
      * @param monde
      */
     public void simuler(Monde monde){
-        for (Etape e : monde.getLesEtapes()){
-            System.out.println(e.toString());
-        }
+        System.out.println(monde.toString());
     }
 }

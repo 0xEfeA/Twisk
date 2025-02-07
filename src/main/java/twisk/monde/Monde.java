@@ -89,6 +89,7 @@ public class Monde implements Iterable<Etape> {
         sb.append("Monde : \n").append("Entree :");
         for (Etape etape : entree.getSuccesseurs()) {
             sb.append(etape.nom);
+            sb.append(", ");
         }
         sb.append("\n");
         for (Etape etape : lesEtapes) {

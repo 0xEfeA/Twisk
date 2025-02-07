@@ -11,10 +11,10 @@ public class ActiviteRestreinte extends Activite {
     /**
      * Constructeur
      * @param nom nom de l'activité
-     * @param t temps dans l'activité
-     * @param e écart de temps
+     * @param temps temps dans l'activité
+     * @param ecart écart de temps
      */
-    public ActiviteRestreinte(String nom, int t, int e) {
+    public ActiviteRestreinte(String nom, int temps, int ecart) {
         super(nom);
     }
 }
