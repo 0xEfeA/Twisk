@@ -1,12 +1,11 @@
 package twisk.monde;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 
 public class Monde implements Iterable<Etape> {
-    private GestionnaireEtapes lesEtapes ;
-    private SasEntree entree;
-    private SasSortie sortie;
+    private final GestionnaireEtapes lesEtapes ;
+    private final SasEntree entree;
+    private final SasSortie sortie;
 
     /**
      * Constructeur
@@ -87,20 +86,21 @@ public class Monde implements Iterable<Etape> {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Monde : Entrée ");
-        // Affichage entrées
-        sb.append(entree.getSuccesseurs().toString());
-        //Affichage Etapes
-        for (Etape etape : lesEtapes) {
-            etape.toString();
+        sb.append("Monde : \n").append("Entree :");
+        for (Etape etape : entree.getSuccesseurs()) {
+            sb.append(etape.nom);
         }
-        sb.append("\nMonde : Sortie ");
-        // Affichage sorties
-        for(Etape etape : lesEtapes){
-            if (etape.getSuccesseurs().contains(sortie)  ){
-                sb.append(etape.getSuccesseurs().toString());
+        sb.append("\n");
+        for (Etape etape : lesEtapes) {
+            sb.append(etape.toString()).append("\n");
+        }
+        sb.append("Sortie :");
+        for (Etape etape : lesEtapes) {
+            if (etape.getSuccesseurs().contains(sortie)) {
+                sb.append(etape.nom).append("\n");
             }
         }
+
         return sb.toString();
     }
 

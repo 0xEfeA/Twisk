@@ -13,7 +13,7 @@ public abstract class Etape implements Iterable<Etape> {
    private final ArrayList<Etape> successeurs;
 
    // Numéro d'étape
-    private int numero;
+    private final int numero;
 
     /**
      * Constructeur
@@ -81,6 +81,6 @@ public abstract class Etape implements Iterable<Etape> {
      * @return  les successeurs de l'étape
      */
     public ArrayList<Etape> getSuccesseurs() {
-        return successeurs;
+        return this.successeurs;
     }
 }
