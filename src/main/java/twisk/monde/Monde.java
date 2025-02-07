@@ -19,18 +19,22 @@ public class Monde implements Iterable<Etape> {
 
     /**
      * Function qui gère les Etapes qui sont des Entrées
-     * @param e les etapes passé en paramètre
+     * @param etape les etapes passé en paramètre
      */
-    public void aCommeEntree(Etape... e) {
-        //Ask the Prof
+    public void aCommmeEntree(Etape... etape) {
+        for (Etape e : etape ){
+            entree.ajouterSuccesseur(e);
+        }
     }
 
     /**
      * Function qui gère les Etapes qui sont des Sortoes
-     * @param e les etapes passé en paramètre
+     * @param etape les etapes passé en paramètre
      */
-    public void aCommeSortie(Etape... e) {
-        //Ask the prof
+    public void aCommmeSortie(Etape... etape) {
+        for (Etape e : etape ){
+            e.ajouterSuccesseur(sortie);
+        }
     }
 
     /**
