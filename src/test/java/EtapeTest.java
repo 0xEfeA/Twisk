@@ -1,13 +1,19 @@
-package test.java;
 
-import main.java.twisk.monde.Activite;
-import main.java.twisk.monde.Etape;
-import main.java.twisk.monde.Guichet;
+import org.junit.jupiter.api.BeforeEach;
+import twisk.monde.Activite;
+import twisk.monde.Etape;
+import twisk.monde.Guichet;
 import org.junit.jupiter.api.Test;
+import twisk.outils.FabriqueNumero;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class EtapeTest {
+    @BeforeEach
+    void setUp() {
+        FabriqueNumero.getInstance().reset();
+    }
+
     @Test
     void testNumeroEtape() {
         Etape etape1 = new Activite("Zoo");
@@ -27,7 +33,14 @@ class EtapeTest {
         etape1.ajouterSuccesseur(etape3);
         assertEquals("Zoo: 2 successeurs - Toboggan, Musée, ", etape1.toString());
     }
-
-
+    @Test
+    void testNbSuccesseur() {
+        Etape etape1 = new Activite("Zoo");
+        Etape etape2 = new Activite("Toboggan");
+        Etape etape3 = new Guichet("Musée");
+        etape1.ajouterSuccesseur(etape2);
+        etape1.ajouterSuccesseur(etape3);
+        assertEquals(2,etape1.nbSuccesseurs(), " Le zoo doit avoir 2 successeurs ");
+    }
 
 }

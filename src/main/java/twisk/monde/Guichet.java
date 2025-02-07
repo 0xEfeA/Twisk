@@ -1,7 +1,7 @@
-package main.java.twisk.monde;
+package twisk.monde;
 
 
-import main.java.twisk.outils.FabriqueNumero;
+import twisk.outils.FabriqueNumero;
 
 public class Guichet   extends Etape {
     // Nombre de personne que le guichet peut acceuillir

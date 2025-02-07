@@ -1,6 +1,5 @@
-package main.java.twisk.monde;
+package twisk.monde;
 
-import java.util.Collections;
 import java.util.Iterator;
 
 public class Monde implements Iterable<Etape> {

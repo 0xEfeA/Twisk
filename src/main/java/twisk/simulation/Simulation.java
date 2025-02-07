@@ -1,6 +1,6 @@
-package main.java.twisk.simulation;
+package twisk.simulation;
 
-import main.java.twisk.monde.*;
+import twisk.monde.*;
 
 public class Simulation {
     /**

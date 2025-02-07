@@ -1,4 +1,4 @@
-package main.java.twisk.outils;
+package twisk.outils;
 
 public class FabriqueNumero {
     // Seule instance de fabrique numéro (Singleton)

@@ -1,7 +1,7 @@
-package main.java.twisk;
+package twisk;
 
-import main.java.twisk.monde.*;
-import main.java.twisk.simulation.*;
+import twisk.monde.*;
+import twisk.simulation.*;
 
 import java.util.Scanner;
 
