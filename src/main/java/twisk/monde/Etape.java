@@ -77,6 +77,10 @@ public abstract class Etape implements Iterable<Etape> {
     public int getNumeroEtape() {
         return numero;
     }
-
-
+    /**
+     * @return  les successeurs de l'étape
+     */
+    public ArrayList<Etape> getSuccesseurs() {
+        return successeurs;
+    }
 }

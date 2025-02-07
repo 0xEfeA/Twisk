@@ -13,6 +13,7 @@ class MondeTest {
         Etape etape2 = new Activite("Musée");
         Etape etape3 = new Activite("Piscine");
         Monde monde = new Monde();
+        System.out.println(monde.toString());
         monde.ajouter(etape, etape2, etape3);
         assertEquals(3,monde.nbEtapes(),"Le monde doit avoir 3 étapes");
     }

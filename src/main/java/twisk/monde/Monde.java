@@ -1,5 +1,6 @@
 package twisk.monde;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 public class Monde implements Iterable<Etape> {
@@ -82,4 +83,25 @@ public class Monde implements Iterable<Etape> {
     public Iterator<Etape> iterator() {
         return lesEtapes.iterator();
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Monde : Entrée ");
+        // Affichage entrées
+        sb.append(entree.getSuccesseurs().toString());
+        //Affichage Etapes
+        for (Etape etape : lesEtapes) {
+            etape.toString();
+        }
+        sb.append("\nMonde : Sortie ");
+        // Affichage sorties
+        for(Etape etape : lesEtapes){
+            if (etape.getSuccesseurs().contains(sortie)  ){
+                sb.append(etape.getSuccesseurs().toString());
+            }
+        }
+        return sb.toString();
+    }
+
 }

@@ -15,7 +15,17 @@ public class Activite extends Etape {
     public Activite(String nom) {
         super(nom);
     }
-
+    /**
+     * Constructeur
+     * @param nom le nom d'activité
+     * @param temps temps de l'activité
+     * @param  ecartTemps delta de temps de l'activité
+     */
+    public Activite(String nom, int temps, int ecartTemps) {
+        super(nom);
+        this.temps = temps;
+        this.ecartTemps = ecartTemps;
+    }
 
 
     /**
