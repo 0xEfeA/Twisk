@@ -98,21 +98,29 @@ public class Monde implements Iterable<Etape> {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Monde : \n").append("Entree :");
+        boolean first = true;
         for (Etape etape : entree.getSuccesseurs()) {
+            if (!first) {
+                sb.append(", ");
+            }
             sb.append(etape.nom);
-            sb.append(", ");
+            first = false;
         }
         sb.append("\n");
         for (Etape etape : lesEtapes) {
             sb.append(etape.toString()).append("\n");
         }
         sb.append("Sortie :");
+        boolean one = true;
         for (Etape etape : lesEtapes) {
             if (etape.getSuccesseurs().contains(sortie)) {
-                sb.append(etape.nom).append("\n");
+                if (!one) {
+                    sb.append(", ");
+                }
+                sb.append(etape.nom);
+                one = false;
             }
         }
-
         return sb.toString();
     }
 

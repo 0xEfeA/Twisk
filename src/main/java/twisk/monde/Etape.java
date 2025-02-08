@@ -54,9 +54,23 @@ public abstract class Etape implements Iterable<Etape> {
         @Override
         public String toString() {
             StringBuilder sb = new StringBuilder();
-            sb.append(this.nom).append(": ").append(this.nbSuccesseurs()).append(" successeurs").append(" - ");
+            int nbsuc = this.nbSuccesseurs();
+            //reduire le nombre de successeurs pour l'affichage standard si c'est une sas de sortie
+            for (Etape e : successeurs){
+                if (e.getNom().equals("SasSortie")){
+                    nbsuc -=1;
+                }
+            }
+            sb.append(this.nom).append(": ").append(nbsuc).append(" successeurs").append(" - ");
+            boolean first = true;
             for (Etape e : successeurs) {
-                sb.append(e.nom).append(", ");
+                if (!e.getNom().equals("SasSortie")) { //pour ne pas afficher le sas Sortie sur le sortie standard
+                    if (!first) {
+                        sb.append(", ");
+                    }
+                    sb.append(e.nom);
+                    first = false;
+                }
             }
             return sb.toString();
         }
@@ -82,5 +96,11 @@ public abstract class Etape implements Iterable<Etape> {
      */
     public ArrayList<Etape> getSuccesseurs() {
         return this.successeurs;
+    }
+    /**
+     * @return  les nom de l'étape
+     */
+    public String getNom() {
+        return nom;
     }
 }
