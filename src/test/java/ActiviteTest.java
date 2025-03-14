@@ -26,5 +26,12 @@ class ActiviteTest extends EtapeTest {
         Activite etape1 = new Activite("Zoo",10,3);
         assertEquals(3,etape1.getEcartTemps(),"L'écart doit être de 3 secondes");
     }
-
+    @Test
+    void TesttoC() {
+        Activite etape1 = new Activite("Zoo",10,3);
+        Activite etape2 = new Activite("cinéma",10,3);
+        Activite etape3 = new Activite("Musée",10,3);
+        etape1.ajouterSuccesseur(etape2,etape3);
+        System.out.println(etape1.toC());
+    }
 }

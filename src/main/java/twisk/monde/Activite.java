@@ -59,4 +59,17 @@ public class Activite extends Etape {
         return ecartTemps;
     }
 
+    public String toC(){
+        StringBuilder sb = new StringBuilder();
+        //Commentaire pour lisibilité dans code générer
+        sb.append("// Activite").append(nom).append("\n");
+        // délai(temps,ecartTemps);
+        sb.append("delai(").append(temps).append(",").append(ecartTemps).append(");\n");
+        // tranfert(activiter, successeur); pour tous les successeurs
+        for (Etape etape: this.getSuccesseurs()){
+            sb.append("tranfert(").append(nom).append(",").append(etape.getNom()).append(");\n");
+        }
+        return sb.toString();
+    }
+
 }

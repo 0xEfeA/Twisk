@@ -98,9 +98,14 @@ public abstract class Etape implements Iterable<Etape> {
         return this.successeurs;
     }
     /**
-     * @return  les nom de l'étape
+     * @return  les noms de l'étape
      */
     public String getNom() {
         return nom;
     }
+
+    /**
+     * Méthode de génération du code C pour les Etapes
+     */
+    public abstract String toC();
 }

@@ -42,6 +42,11 @@ public class Guichet   extends Etape {
         return true;
     }
 
+    @Override
+    public String toC() {
+        return "";
+    }
+
     /**
      * @return  le numéro sémaphore du guichet
      */
