@@ -1,8 +1,5 @@
 
-import twisk.monde.Activite;
-import twisk.monde.Etape;
-import twisk.monde.Guichet;
-import twisk.monde.Monde;
+import twisk.monde.*;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -42,6 +39,22 @@ class MondeTest {
 
 
     }
+    @Test
+    void TesttoC(){
+        Monde monde = new Monde();
 
+        Etape etape = new Activite("Zoo",10,2);
+        Etape guichet = new Guichet("Guichet",4);
+
+        Etape etape2 = new ActiviteRestreinte("Piscine",7,4);
+        etape.ajouterSuccesseur( guichet);
+        guichet.ajouterSuccesseur( etape2);
+
+        monde.aCommeEntree(etape);
+        monde.aCommeSortie(etape2);
+        //l'ordre d'ajout dans monde influt sur l'ordre de génération du code ! Il faut donc ajouter le guichet avant son activité restreinte
+        monde.ajouter(etape, guichet, etape2);
+        System.out.println(monde.toC());
+    }
 }
 

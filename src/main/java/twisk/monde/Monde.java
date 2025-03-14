@@ -1,5 +1,4 @@
 package twisk.monde;
-
 import java.util.Iterator;
 
 public class Monde implements Iterable<Etape> {
@@ -124,4 +123,28 @@ public class Monde implements Iterable<Etape> {
         return sb.toString();
     }
 
+    public String toC() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("#include \"../ressources/codeC/def.h\"\n");
+        sb.append("#define sasEntree ").append(entree.getNumeroEtape()).append("\n").append("#define sasSortie 1\n");
+        for (Etape etape : lesEtapes) {
+            sb.append("#define ").append(etape.nom).append(" ").append(etape.getNumeroEtape()).append("\n");
+
+        }
+        sb.append("\n");
+        sb.append("void simulation(int ids){\n").append(entree.toC()).append("\n");
+
+        for (Etape etape : lesEtapes) {
+            if (etape.estUnGuichet()) {
+                //Cast en guichet pour pouvoir appelé la méthode dans Guichet
+                Guichet guichet = (Guichet) etape;
+                sb.append(guichet.toC()).append("\n");
+            } else {
+                sb.append(etape.toC()).append("\n");
+            }
+        }
+        sb.append("}");
+        return sb.toString();
+
+    }
 }

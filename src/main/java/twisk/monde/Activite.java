@@ -69,7 +69,7 @@ public class Activite extends Etape {
         sb.append("delai(").append(temps).append(",").append(ecartTemps).append(");\n");
         // tranfert(activiter, successeur); pour tous les successeurs
         for (Etape etape: this.getSuccesseurs()){
-            sb.append("tranfert(").append(nom).append(",").append(etape.getNom()).append(");\n");
+            sb.append("transfert(").append(nom).append(",").append(etape.getNom()).append(");\n");
         }
         return sb.toString();
     }
