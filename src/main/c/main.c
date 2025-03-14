@@ -6,9 +6,11 @@
 int main(int argc, char *argv[]) {
   // Instanciations des paramètres du monde de test
   int nbEtapes = 6;
-  int nbClients = 5;
-  int nbGuichets =0;
-  int* tabJetonsGuichet = NULL ;
+  int nbClients = 20;
+  int nbGuichets =1;
+  int* tabJetonsGuichet =  malloc(sizeof(int) * nbGuichets);
+  //nombre de place dans l'activité
+  tabJetonsGuichet[0] = 5;
   // Récupération de l'adresse du tableau contenant les pid des processus retourné par start_simulation
   int* tabsimu = start_simulation(nbEtapes,nbGuichets, nbClients, tabJetonsGuichet);
   // Affichage pid
@@ -35,7 +37,11 @@ int main(int argc, char *argv[]) {
       }else if ( i== nbEtapes-1) {
         printf("étape %d (sortie) %d clients : ", i, nbClientEtapeI);
 
-      }else {
+      }else if (i == 1 ||i == nbEtapes-3) {
+        printf("étape %d (guichet) %d clients : ", i, nbClientEtapeI);
+
+      }
+      else {
         printf("étape %d (Activité) %d clients : ", i, nbClientEtapeI);
 
       }
@@ -44,14 +50,17 @@ int main(int argc, char *argv[]) {
         int pidClientEtapeI = tabclient[i *tailleEtapesEnMemoire + j + 1];
         printf("%d,",pidClientEtapeI);
       }
+
       printf("\n");
     }
-      if ( tabclient[2 * tailleEtapesEnMemoire]==nbClients) {
+    //Condition d'arrêt : quand tous les clients arrivent à la sortie
+      if ( tabclient[(nbEtapes-1) * tailleEtapesEnMemoire]==nbClients) {
         free(tabclient);
         break;
       }
     free(tabclient);
     sleep(1);
+    printf("\n");
   }
 // free pour éviter fuite mémoire
 free(tabsimu);
