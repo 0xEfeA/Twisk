@@ -15,7 +15,8 @@ public class ActiviteRestreinte extends Activite {
      * @param ecart écart de temps
      */
     public ActiviteRestreinte(String nom, int temps, int ecart) {
-        super(nom);
+        super(nom,temps,ecart);
     }
+
 
 }

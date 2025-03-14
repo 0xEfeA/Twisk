@@ -58,7 +58,9 @@ public class Activite extends Etape {
     public int getEcartTemps() {
         return ecartTemps;
     }
-
+    /**
+     * @return Code c pour l'activité
+     */
     public String toC(){
         StringBuilder sb = new StringBuilder();
         //Commentaire pour lisibilité dans code générer

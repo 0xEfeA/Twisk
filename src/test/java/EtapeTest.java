@@ -16,7 +16,7 @@ class EtapeTest {
         Etape etape3 = new Guichet("Musée");
         etape1.ajouterSuccesseur(etape2);
         etape1.ajouterSuccesseur(etape3);
-        assertEquals("Zoo: 2 successeurs - Toboggan, Musée, ", etape1.toString());
+        assertEquals("Zoo: 2 successeurs - Toboggan, Musée", etape1.toString());
     }
     @Test
     void testNbSuccesseur() {

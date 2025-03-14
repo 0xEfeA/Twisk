@@ -26,6 +26,8 @@ public class Guichet   extends Etape {
     public Guichet(String nom, int nbJetons) {
         super(nom);
         this.nbJetons = nbJetons;
+        this.numeroSemaphore = FabriqueNumero.getInstance().getNumeroSemaphore();
+
     }
     /**
      * @return  si c'est une activité
@@ -44,7 +46,21 @@ public class Guichet   extends Etape {
 
     @Override
     public String toC() {
-        return "";
+        StringBuilder sb = new StringBuilder();
+        //Commentaire dans code C
+        sb.append("//Guichet : ").append(this.nom).append("\n");
+        //P(ids,num_sem_guichet);
+        sb.append("P(ids,").append(this.getNumeroSemaphore()).append(");\n");
+        // Délai
+        sb.append("delai(4,2);\n");
+        //V(ids,num_sem_guichet);
+        sb.append("V(ids,").append(this.getNumeroSemaphore()).append(");\n");
+        // tranfert(guichet, successeur); pour tous les successeurs
+
+        for(Etape etape: this.getSuccesseurs()) {
+            sb.append("tranfert(").append(nom).append(",").append(etape.getNom()).append(");\n");
+        }
+        return sb.toString();
     }
 
     /**

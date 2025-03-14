@@ -1,4 +1,5 @@
 
+import twisk.monde.ActiviteRestreinte;
 import twisk.monde.Etape;
 import twisk.monde.Activite;
 import twisk.monde.Guichet;
@@ -31,7 +32,10 @@ class ActiviteTest extends EtapeTest {
         Activite etape1 = new Activite("Zoo",10,3);
         Activite etape2 = new Activite("cinéma",10,3);
         Activite etape3 = new Activite("Musée",10,3);
+        ActiviteRestreinte etape4 = new ActiviteRestreinte("Restreint",10,3);
         etape1.ajouterSuccesseur(etape2,etape3);
+        etape4.ajouterSuccesseur(etape3,etape2,etape4);
         System.out.println(etape1.toC());
+        System.out.println(etape4.toC());
     }
 }
