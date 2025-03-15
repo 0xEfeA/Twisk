@@ -23,4 +23,10 @@ public class Simulation {
         environnement.compiler();
         environnement.construireLaBibliotheque();
     }
+
+    //Fonctions natives
+    public native int[] start_simulation(int nbEtapes, int nbGuichets, int nbClients, int[] tabJetonsGuichets);
+    public native int[] ou_sont_les_clients(int nbEtapes, int nbClients);
+    public native void nettoyage();
+
 }
