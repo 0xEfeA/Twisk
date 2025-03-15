@@ -10,16 +10,18 @@ public class ClientTwisk {
     private static Monde MondeTroisEtapes(){
         Monde world = new Monde();
         Etape activite1 = new Activite("zoo",6,3);
-        Etape guichet = new Guichet("guichet_tobogan");
+        Etape guichet = new Guichet("guichet_tobogan",1);
         Etape activite2 = new ActiviteRestreinte("tobogan",4,2);
+        Etape activite3 = new Activite("piscine",5,2);
 
         activite1.ajouterSuccesseur(guichet);
         guichet.ajouterSuccesseur(activite2);
+        activite2.ajouterSuccesseur(activite3);
 
-        world.ajouter(activite1,guichet,activite2);
+        world.ajouter(activite1,guichet,activite2,activite3);
 
         world.aCommeEntree(activite1);
-        world.aCommeSortie(activite2);
+        world.aCommeSortie(activite3);
 
         return world;
     }
@@ -60,7 +62,7 @@ public class ClientTwisk {
         Simulation simulation = new Simulation();
 
         Monde world1 = MondeTroisEtapes();
-        //Monde world2 = MondeSixEtapes();
+        Monde world2 = MondeSixEtapes();
 
         simulation.simuler(world1);
         //System.out.println(" ");

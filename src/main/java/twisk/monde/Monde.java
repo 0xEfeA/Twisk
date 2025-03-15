@@ -128,9 +128,9 @@ public class Monde implements Iterable<Etape> {
 
     public String toC() {
         StringBuilder sb = new StringBuilder();
-        sb.append("#include \"../ressources/codeC/def.h\"\n");
-        sb.append("#define SAS_ENTREE ").append(entree.getNumeroEtape()).append("\n")
-                .append("#define SAS_SORTIE 1\n");
+        sb.append("#include \"def.h\"\n");
+        sb.append("#define SASENTREE ").append(entree.getNumeroEtape()).append("\n")
+                .append("#define SASSORTIE 1\n");
 
         int tempIndex = 0;
         Map<String, String> tempNames = new HashMap<>();
@@ -169,7 +169,7 @@ public class Monde implements Iterable<Etape> {
      * @param etape Nom de l'étape
      * @return Identifiant valide en C
      */
-    public String genererNomConstante(String etape) {
+    private String genererNomConstante(String etape) {
         //Supprimer les accents
         String normalized = Normalizer.normalize(etape, Normalizer.Form.NFD);
         normalized = normalized.replaceAll("\\p{M}", ""); // Supprime les accents
