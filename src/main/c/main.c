@@ -6,11 +6,12 @@
 int main(int argc, char *argv[]) {
   // Instanciations des paramètres du monde de test
   int nbEtapes = 6;
-  int nbClients = 20;
+  int nbClients = 5;
   int nbGuichets =1;
   int* tabJetonsGuichet =  malloc(sizeof(int) * nbGuichets);
   //nombre de place dans l'activité
-  tabJetonsGuichet[0] = 5;
+  tabJetonsGuichet[0] = 3;
+   tabJetonsGuichet[1] = 1;
   // Récupération de l'adresse du tableau contenant les pid des processus retourné par start_simulation
   int* tabsimu = start_simulation(nbEtapes,nbGuichets, nbClients, tabJetonsGuichet);
   // Affichage pid

@@ -60,11 +60,11 @@ public class ClientTwisk {
         Simulation simulation = new Simulation();
 
         Monde world1 = MondeTroisEtapes();
-        Monde world2 = MondeSixEtapes();
+        //Monde world2 = MondeSixEtapes();
 
         simulation.simuler(world1);
-        System.out.println(" ");
-        simulation.simuler(world2);
+        //System.out.println(" ");
+        //simulation.simuler(world2);
 
     }
 }
