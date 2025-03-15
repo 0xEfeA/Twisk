@@ -18,6 +18,9 @@ public class Simulation {
      * @param monde
      */
     public void simuler(Monde monde) {
-        System.out.println(monde.toC());
+        String codeC = monde.toC();
+        environnement.creerFichier(codeC);
+        environnement.compiler();
+        environnement.construireLaBibliotheque();
     }
 }
