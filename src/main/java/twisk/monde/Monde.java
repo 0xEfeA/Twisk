@@ -1,5 +1,8 @@
 package twisk.monde;
+import java.text.Normalizer;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 public class Monde implements Iterable<Etape> {
     private final GestionnaireEtapes lesEtapes ;
@@ -126,10 +129,23 @@ public class Monde implements Iterable<Etape> {
     public String toC() {
         StringBuilder sb = new StringBuilder();
         sb.append("#include \"../ressources/codeC/def.h\"\n");
-        sb.append("#define sasEntree ").append(entree.getNumeroEtape()).append("\n").append("#define sasSortie 1\n");
-        for (Etape etape : lesEtapes) {
-            sb.append("#define ").append(etape.nom).append(" ").append(etape.getNumeroEtape()).append("\n");
+        sb.append("#define SAS_ENTREE ").append(entree.getNumeroEtape()).append("\n")
+                .append("#define SAS_SORTIE 1\n");
 
+        int tempIndex = 0;
+        Map<String, String> tempNames = new HashMap<>();
+
+        for (Etape etape : lesEtapes) {
+            String nomConstante = genererNomConstante(etape.nom);
+
+            // If the name is empty or "_", assign a unique temporary name
+            if (nomConstante.equals("_") || nomConstante.isEmpty()) {
+                nomConstante = "TEMP_ETAPE_" + (tempIndex++);
+                tempNames.put(etape.nom, nomConstante);
+            }
+
+            sb.append("#define ").append(nomConstante).append(" ")
+                    .append(etape.getNumeroEtape()).append("\n");
         }
         sb.append("\n");
         sb.append("void simulation(int ids){\n").append(entree.toC()).append("\n");
@@ -147,4 +163,27 @@ public class Monde implements Iterable<Etape> {
         return sb.toString();
 
     }
+
+    /**
+     * Transforme un nom d'étape en un identifiant valide pour le C.
+     * @param etape Nom de l'étape
+     * @return Identifiant valide en C
+     */
+    public String genererNomConstante(String etape) {
+        //Supprimer les accents
+        String normalized = Normalizer.normalize(etape, Normalizer.Form.NFD);
+        normalized = normalized.replaceAll("\\p{M}", ""); // Supprime les accents
+
+        // Remplacer les caractères interdits par "_"
+        normalized = normalized.replaceAll("[^a-zA-Z0-9]", "_");
+
+        // Ajouter un préfixe si le nom commence par un chiffre
+        if (Character.isDigit(normalized.charAt(0))) {
+            normalized = "_" + normalized;
+        }
+
+        // Mettre en majuscule pour respecter la convention C
+        return normalized.toUpperCase();
+    }
 }
+
