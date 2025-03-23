@@ -4,17 +4,11 @@ public class FabriqueNumero {
     // Seule instance de fabrique numéro (Singleton)
     private static final FabriqueNumero instance = new FabriqueNumero();
     // Compteur du numéro d'étape
-    private int cptEtape;
+    private int cptEtape = -1 ;
     // Numero de Sémaphore du guichet
-    private int cptSemaphore;
+    private int cptSemaphore = 0;
 
-    /**
-     * Constructeur qui initialise les 2 compteurs
-     */
-    private FabriqueNumero() {
-        cptEtape = 0;
-        cptSemaphore = 1;
-    }
+
 
     /**
      * Renvoie l'instance de la classe
@@ -29,19 +23,21 @@ public class FabriqueNumero {
      * @return  renvoie le numéro d'étape
      */
     public int getNumeroEtape() {
-        return cptEtape++;
+        this.cptEtape ++;
+        return cptEtape;
     }
     /**
      * Méthode renvoyant numéro de sémaphore du guichet
      * @return  renvoie le numéro de sémaphore du guichet
      */
     public int getNumeroSemaphore() {
-        return cptSemaphore++;
+        this.cptSemaphore ++;
+        return cptSemaphore;
     }
     /**
      * Méthode qui réinitilise le numéro d'étapes et de sémaphore
      */    public void reset() {
-        cptEtape = 0;
-        cptSemaphore = 1;
+        cptEtape = -1;
+        cptSemaphore = 0;
     }
 }

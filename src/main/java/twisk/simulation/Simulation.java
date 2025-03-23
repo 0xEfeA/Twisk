@@ -31,7 +31,7 @@ public class Simulation {
         System.load("/tmp/twisk/libTwisk.so") ;
 
         // Instanciations des paramètres du monde de test
-        int nbEtapes = monde.nbEtapes();
+        int nbEtapes = monde.nbEtapes()+2;
         int nbClients = this.nbClients;
         int nbGuichets =monde.nbGuichet();
         int[] tabJetonsGuichet = new int[nbGuichets];
@@ -56,11 +56,24 @@ public class Simulation {
             int[] tabclient = ou_sont_les_clients(nbEtapes, nbClients);
             // taille de ségment mémoire d'une étape (nbClient + 1 case qui stock le nombre de client en mémoire)
             int tailleEtapesEnMemoire = nbClients+1;
+
+            System.out.println();
             for (int i = 0; i < nbEtapes; i++) {
                 // On récupère le nombre de client de l'étape i
                 int nbClientEtapeI = tabclient[i * tailleEtapesEnMemoire];
                 // Selon le numéro l'étape on affiche un nom différent
-                System.out.printf("étape %d (%s) %d clients : ", i, monde.getNomEtape(i), nbClientEtapeI);
+                if(i==0){
+                    System.out.printf("étape %d (Entrée) %d clients : ", i, nbClientEtapeI);
+
+                }else if(i==1){
+                    System.out.printf("étape %d (Sortie) %d clients : ", i, nbClientEtapeI);
+
+                }else{
+                    System.out.printf("étape %d (%s) %d clients : ", i, monde.getNomEtape(i-2), nbClientEtapeI);
+
+                }
+
+
                 //Affichage des identifiants des clients à l'étape i
                 for (int j = 0; j < nbClientEtapeI; j++) {
                     int pidClientEtapeI = tabclient[i *tailleEtapesEnMemoire + j + 1];
@@ -70,7 +83,7 @@ public class Simulation {
                 System.out.print("\n");
             }
             //Condition d'arrêt : quand tous les clients arrivent à la sortie
-            if ( tabclient[(nbEtapes-1) * tailleEtapesEnMemoire]==nbClients) {
+            if ( tabclient[tailleEtapesEnMemoire]==nbClients) {
                 break;
             }
 
