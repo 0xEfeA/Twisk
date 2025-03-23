@@ -30,6 +30,7 @@ public class GestionnaireEtapes implements  Iterable<Etape>{
      */
    public void ajouterEtape(Etape... etapes) {
         Collections.addAll(list_etapes, etapes);
+
     }
 
     /**
@@ -57,4 +58,40 @@ public class GestionnaireEtapes implements  Iterable<Etape>{
         return list_etapes.get(index);
     }
 
+    /**
+     * Réorganise les étapes dans leur ordre de succession
+     * @param initial entree du monde
+     */
+    public void  reoganiser(Etape initial) {
+        ArrayList<Etape> etapes_parcourus = new ArrayList<>();
+        parcourirGraphe(initial, etapes_parcourus);
+        // Etapes trié dans l'ordre de succession
+        this.list_etapes = etapes_parcourus;
+    }
+
+    /**
+     * Renvoie le parcour dans l'ordre des successeurs
+     * @param etape Etape initial (entrée)
+     * @param etapesParcourues Tableau qui stock parcours
+     */
+    private void parcourirGraphe(Etape etape, ArrayList<Etape> etapesParcourues) {
+        for (Etape successeur : etape.getSuccesseurs()){
+            // on s'arrete quand on arrive à la sortie
+            if(successeur.estSasSortie())
+                continue;
+            if(!etapesParcourues.contains(successeur)){
+                etapesParcourues.add(successeur);
+                parcourirGraphe(successeur, etapesParcourues);
+            }
+        }
+}
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (Etape etape : list_etapes) {
+            sb.append(etape.toString()).append(" -- ");
+        }
+        sb.append("\n");
+        return sb.toString();
+    }
 }

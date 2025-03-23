@@ -10,6 +10,6 @@ public class SasSortie extends Activite{
 
     @Override
     public String toC() {
-        return "//SasSortie";
+        return "";
     }
 }

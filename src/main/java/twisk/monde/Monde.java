@@ -1,4 +1,6 @@
 package twisk.monde;
+import twisk.outils.FabriqueNumero;
+
 import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,6 +19,7 @@ public class Monde implements Iterable<Etape> {
         this.lesEtapes = new GestionnaireEtapes();
         this.entree = new SasEntree();
         this.sortie = new SasSortie();
+        FabriqueNumero.getInstance().reset();
     }
 
     /**
@@ -52,6 +55,7 @@ public class Monde implements Iterable<Etape> {
      */
     public void ajouter(Etape... etape) {
         lesEtapes.ajouterEtape(etape);
+
     }
 
     /**
@@ -144,7 +148,7 @@ public class Monde implements Iterable<Etape> {
     public String toC() {
         StringBuilder sb = new StringBuilder();
         sb.append("#include \"def.h\"\n");
-        sb.append("#define SASENTREE ").append(entree.getNumeroEtape()).append("\n")
+        sb.append("#define SASENTREE 0 \n")
                 .append("#define SASSORTIE 1\n");
 
         int tempIndex = 0;
@@ -158,19 +162,20 @@ public class Monde implements Iterable<Etape> {
                 nomConstante = "TEMP_ETAPE_" + (tempIndex++);
                 tempNames.put(etape.nom, nomConstante);
             }
+            // Permet d'éviter la duplication de sasSortie que je n'ai pas su corriger autrement pour l'instant
+            if (!nomConstante.equals("SASSORTIE")){
+                sb.append("#define ").append(nomConstante).append(" ")
+                        .append(etape.getNumeroEtape()+2).append("\n");
+            }
 
-            sb.append("#define ").append(nomConstante).append(" ")
-                    .append(etape.getNumeroEtape()).append("\n");
         }
         sb.append("\n");
         sb.append("void simulation(int ids){\n").append(entree.toC()).append("\n");
-
-        for (Etape etape : lesEtapes) {
-            if (etape.estUnGuichet()) {
-                //Cast en guichet pour pouvoir appelé la méthode dans Guichet
+        for(Etape etape : lesEtapes){
+            if(etape.estUnGuichet()){
                 Guichet guichet = (Guichet) etape;
                 sb.append(guichet.toC()).append("\n");
-            } else {
+            }else {
                 sb.append(etape.toC()).append("\n");
             }
         }
@@ -209,5 +214,14 @@ public class Monde implements Iterable<Etape> {
     public String getNomEtape(int index) {
         return getLesEtapes().getEtapeI(index).getNom();
     }
+
+    /**
+     * Renvoie l'entrée du monde
+     * @return entrée du monde
+     */
+    public SasEntree getEntree(){
+        return entree;
+    }
+
 }
 

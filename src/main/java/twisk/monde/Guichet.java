@@ -74,7 +74,6 @@ public class Guichet   extends Etape {
         sb.append("delai(4,2);\n");
 
         // V(ids, num_sem_guichet);
-        sb.append("V(ids,").append(this.getNumeroSemaphore()).append(");\n");
 
         // transfert(guichet, successeur); pour tous les successeurs
         for (Etape etape : this.getSuccesseurs()) {
@@ -84,6 +83,7 @@ public class Guichet   extends Etape {
                     .append(genererNomConstante(etape.getNom()))
                     .append(");\n");
         }
+        sb.append("V(ids,").append(this.getNumeroSemaphore()).append(");\n");
 
         return sb.toString();
     }

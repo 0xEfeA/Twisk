@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class Simulation {
     private KitC environnement;
-    private int nbClients = 5; // Par défaut on a 5 clients
+    private int nbClients = 3; // Par défaut on a 5 clients
     /**
      * Constructeur sans argument
      */
@@ -24,6 +24,7 @@ public class Simulation {
      * @param monde
      */
     public void simuler(Monde monde) {
+        monde.getLesEtapes().reoganiser(monde.getEntree());
         String codeC = monde.toC();
         environnement.creerFichier(codeC);
         environnement.compiler();
@@ -39,8 +40,10 @@ public class Simulation {
         int[] tabJetonsGuichet = new int[nbGuichets];
         //nombre de jetons pour chaque guichets
         ArrayList<Guichet> guichets = monde.getGuichets();
+        int indiceGuichet = 0;
         for(Guichet gui: guichets){
-            tabJetonsGuichet[gui.getNumeroSemaphore()-1] = gui.getNbJetons();
+            tabJetonsGuichet[indiceGuichet] = gui.getNbJetons();
+            indiceGuichet++;
         }
         // Récupération de l'adresse du tableau contenant les pid des processus retourné par start_simulation
         int[] tabsimu = start_simulation(nbEtapes, nbGuichets, nbClients, tabJetonsGuichet);
@@ -61,7 +64,7 @@ public class Simulation {
             int tailleEtapesEnMemoire = nbClients+1;
 
             System.out.println();
-            for (int i = 0; i < nbEtapes; i++) {
+            for (int i = 0; i < nbEtapes-1; i++) {
                 // On récupère le nombre de client de l'étape i
                 int nbClientEtapeI = tabclient[i * tailleEtapesEnMemoire];
                 // Etape 0 SasEntrée
@@ -100,6 +103,8 @@ public class Simulation {
             System.out.println("---------------------------------------------------------------");
         }
         nettoyage();
+        System.out.println();
+        System.out.println("Simulation terminée.\n");
 
 
     }

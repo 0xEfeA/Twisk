@@ -68,7 +68,9 @@ public class ClientTwisk {
         monde.aCommeEntree(zoo);
         monde.aCommeSortie(tob);
 
-        return  monde;
+        Simulation s = new Simulation();
+        s.setNbClients(10);
+        return monde;
     }
     /**
      * Fonction principal
@@ -79,6 +81,7 @@ public class ClientTwisk {
 
         Monde world1 = MondeTroisEtapes();
         Monde world2 = MondeSixEtapes();
+        Monde world3 = Mondetest();
 
         simulation.simuler(world1);
         //System.out.println(" ");
