@@ -56,31 +56,30 @@ public class Simulation {
             int[] tabclient = ou_sont_les_clients(nbEtapes, nbClients);
             int tailleEtapesEnMemoire = nbClients + 1;
 
+            // Place les clients au début (sas d'entrée)
+            if (tabclient[0] == 0) {
+                for (int i = 0; i < nbClients; i++) {
+                    tabclient[i] = 0;
+                }
+            }
+
+            // Parcourir toutes les étapes du monde
             for (int i = 0; i < nbEtapes; i++) {
                 int nbClientEtapeI = tabclient[i * tailleEtapesEnMemoire];
 
-                // Trouver l'étpe correspondante
-                Etape etape = null;
-                for (Etape e : monde.getLesEtapes()) {
-                    if (e.getNumeroEtape() == i) {
-                        etape = e;
-                        break;
-                    }
-                }
+                // Trouver l'étape correspondante
+                Etape etape = monde.getLesEtapes().getEtapeI(i);
 
                 // Déterminer le type d'étape
-                String typeEtape = "Pas d'nom"; //par defaut
-                if (etape != null) {
-                    if (etape.estSasEntree()) {
-                        typeEtape = "Entrée";
-                    }
-                   else if (etape.estUnGuichet()) {
-                        typeEtape = etape.getNom();
-                    }else if (etape.estUneActivite()) {
-                        typeEtape = etape.getNom();
-                    } else if (etape.estSasSortie()) {
+                String typeEtape = "Pas de nom"; //par défaut
+                if (etape.estSasEntree()) {
+                    typeEtape = "Entrée";
+                } else if (etape.estUnGuichet()) {
+                    typeEtape = "Guichet";
+                } else if (etape.estUneActivite()) {
+                    typeEtape = "Activité: " + etape.getNom();
+                } else if (etape.estSasSortie()) {
                     typeEtape = "Sortie";
-                    }
                 }
 
                 System.out.printf("étape %d (%s) %d clients : ", i, typeEtape, nbClientEtapeI);
@@ -113,6 +112,7 @@ public class Simulation {
 
         nettoyage();
     }
+
 
 
     //Fonctions natives
