@@ -10,7 +10,7 @@ public class ClientTwisk {
     private static Monde MondeTroisEtapes(){
         Monde world = new Monde();
         Etape activite1 = new Activite("zoo",6,3);
-        Etape guichet = new Guichet("guichet_tobogan",1);
+        Etape guichet = new Guichet("guichet_tobogan",7);
         Etape activite2 = new ActiviteRestreinte("tobogan",4,2);
         Etape activite3 = new Activite("piscine",5,2);
 
@@ -53,7 +53,23 @@ public class ClientTwisk {
 
         return world;
     }
+    private static Monde Mondetest(){
+        Monde monde = new Monde();
 
+        Activite zoo = new Activite("balade au zoo", 3, 1);
+        Guichet guichet = new Guichet("accès au toboggan", 2);
+        Activite tob = new ActiviteRestreinte("toboggan", 2, 1);
+
+        zoo.ajouterSuccesseur(guichet);
+        guichet.ajouterSuccesseur(tob);
+
+        monde.ajouter(zoo, tob, guichet);
+
+        monde.aCommeEntree(zoo);
+        monde.aCommeSortie(tob);
+
+        return  monde;
+    }
     /**
      * Fonction principal
      * @param args l'argument

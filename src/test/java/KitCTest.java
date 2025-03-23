@@ -1,6 +1,7 @@
-package twisk.outils;
 
 import org.junit.jupiter.api.*;
+import twisk.outils.KitC;
+
 import java.nio.file.*;
 import java.io.IOException;
 import static org.junit.jupiter.api.Assertions.*;

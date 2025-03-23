@@ -47,4 +47,14 @@ public class GestionnaireEtapes implements  Iterable<Etape>{
         //return list_etapes.getLast();  //Pour Java 21 +
         return list_etapes.get(list_etapes.size() - 1);
     }
+
+    /**
+     * Renvoie la ième étape du monde
+     * @param index indice de l'étape à renvoyer
+     * @return Etape I
+     */
+    public Etape getEtapeI(int index) {
+        return list_etapes.get(index);
+    }
+
 }
