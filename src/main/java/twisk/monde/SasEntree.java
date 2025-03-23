@@ -14,7 +14,7 @@ public class SasEntree extends Activite{
     public String toC() {
         StringBuilder sb = new StringBuilder();
         // entrer(sasEntree); avec #define sasEntree 0
-        sb.append("entrer(").append(genererNomConstante(this.nom)).append(");\n");
+        sb.append("entrer(").append(genererNomConstante(this.nom)).append(");\n").append("delai(4,2);\n");
 
         // transfert(sasEntree, successeur);
         for (Etape etape : this.getSuccesseurs()) {
@@ -27,17 +27,6 @@ public class SasEntree extends Activite{
 
         return sb.toString();
     }
-
-    @Override
-    public boolean estSasEntree() {
-        return true;
-    }
-
-    @Override
-    public boolean estSasSortie() {
-        return false;
-    }
-
 
 
     /**

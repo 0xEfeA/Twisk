@@ -12,14 +12,4 @@ public class SasSortie extends Activite{
     public String toC() {
         return "//SasSortie";
     }
-
-    @Override
-    public boolean estSasEntree() {
-        return false;
-    }
-
-    @Override
-    public boolean estSasSortie() {
-        return true;
-    }
 }

@@ -54,16 +54,6 @@ public class Guichet   extends Etape {
         return nbJetons;
     }
     @Override
-    public boolean estSasSortie() {
-        return false;
-    }
-
-    @Override
-    public boolean estSasEntree() {
-        return false;
-    }
-
-    @Override
     public String toC() {
         StringBuilder sb = new StringBuilder();
 
