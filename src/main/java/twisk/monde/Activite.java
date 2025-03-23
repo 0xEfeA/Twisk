@@ -45,6 +45,17 @@ public class Activite extends Etape {
     public boolean estUnGuichet() {
         return false;
     }
+
+    @Override
+    public boolean estSasEntree() {
+        return false;
+    }
+
+    @Override
+    public boolean estSasSortie() {
+        return false;
+    }
+
     /**
      * Renvoie La durée de l'actvité
      * @return un entier

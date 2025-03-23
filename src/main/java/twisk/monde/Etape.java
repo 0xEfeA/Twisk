@@ -109,4 +109,6 @@ public abstract class Etape implements Iterable<Etape> {
      */
     public abstract String toC();
 
+    public abstract boolean estSasEntree();
+    public abstract boolean estSasSortie();
 }
