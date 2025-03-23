@@ -28,6 +28,17 @@ public class SasEntree extends Activite{
         return sb.toString();
     }
 
+    @Override
+    public boolean estSasEntree() {
+        return true;
+    }
+
+    @Override
+    public boolean estSasSortie() {
+        return false;
+    }
+
+
 
     /**
      * Transforme un nom d'étape en un identifiant valide pour le C.

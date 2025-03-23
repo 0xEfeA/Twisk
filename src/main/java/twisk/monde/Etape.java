@@ -108,4 +108,7 @@ public abstract class Etape implements Iterable<Etape> {
      * Méthode de génération du code C pour les Etapes
      */
     public abstract String toC();
+
+    public abstract boolean estSasEntree();
+    public abstract boolean estSasSortie();
 }

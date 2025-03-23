@@ -35,7 +35,7 @@ public class ClientTwisk {
 
         Etape activite1 = new Activite("swing",3,1);
         Etape activite2 = new Activite("ladder",4,1);
-        Etape guichet1 = new Guichet("guichet_sandhouse",4);
+        Etape guichet1 = new Guichet("guichet_sandhouse",1);
         Etape activite3 = new ActiviteRestreinte("sandhouse",4,2);
         Etape guichet2 = new Guichet("guichet_bouncy",3);
         Etape activite4 = new ActiviteRestreinte("bouncy",3,1);
