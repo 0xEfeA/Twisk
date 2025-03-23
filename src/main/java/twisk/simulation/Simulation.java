@@ -75,7 +75,7 @@ public class Simulation {
                 if (etape.estSasEntree()) {
                     typeEtape = "Entrée";
                 } else if (etape.estUnGuichet()) {
-                    typeEtape = "Guichet";
+                    typeEtape = "Guichet" + etape.getNom();
                 } else if (etape.estUneActivite()) {
                     typeEtape = "Activité: " + etape.getNom();
                 } else if (etape.estSasSortie()) {
