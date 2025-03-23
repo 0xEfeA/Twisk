@@ -29,9 +29,11 @@ public class Simulation {
         environnement.compiler();
         environnement.construireLaBibliotheque();
         System.load("/tmp/twisk/libTwisk.so") ;
-
+        //Affiche le schéma du monde
+        System.out.println(monde.toString());
+        System.out.println();
         // Instanciations des paramètres du monde de test
-        int nbEtapes = monde.nbEtapes()+2;
+        int nbEtapes = monde.nbEtapes()+2; // +2 pour le sasEntrée et SasSortie
         int nbClients = this.nbClients;
         int nbGuichets =monde.nbGuichet();
         int[] tabJetonsGuichet = new int[nbGuichets];
@@ -42,7 +44,8 @@ public class Simulation {
         }
         // Récupération de l'adresse du tableau contenant les pid des processus retourné par start_simulation
         int[] tabsimu = start_simulation(nbEtapes, nbGuichets, nbClients, tabJetonsGuichet);
-        // Affichage pid
+
+        // Affichage pid avant simulation
         System.out.print("Les clients :");
         for (int i = 0; i < nbClients; i++) {
             System.out.printf(" %d, ",tabsimu[i]);
@@ -61,14 +64,16 @@ public class Simulation {
             for (int i = 0; i < nbEtapes; i++) {
                 // On récupère le nombre de client de l'étape i
                 int nbClientEtapeI = tabclient[i * tailleEtapesEnMemoire];
-                // Selon le numéro l'étape on affiche un nom différent
+                // Etape 0 SasEntrée
                 if(i==0){
-                    System.out.printf("étape %d (Entrée) %d clients : ", i, nbClientEtapeI);
+                    System.out.printf("étape %d (SasEntrée) %d clients : ", i, nbClientEtapeI);
 
-                }else if(i==1){
-                    System.out.printf("étape %d (Sortie) %d clients : ", i, nbClientEtapeI);
+                }// Etape 1 SasSortie (Comme dans le cours)
+                else if(i==1){
+                    System.out.printf("étape %d (SasSortie) %d clients : ", i, nbClientEtapeI);
 
-                }else{
+                }// Les autres étapes sont soit (Activite | ActiviteRestreinte | Guichet)
+                else{
                     System.out.printf("étape %d (%s) %d clients : ", i, monde.getNomEtape(i-2), nbClientEtapeI);
 
                 }
@@ -82,7 +87,7 @@ public class Simulation {
 
                 System.out.print("\n");
             }
-            //Condition d'arrêt : quand tous les clients arrivent à la sortie
+            //Condition d'arrêt : quand tous les clients arrivent à la sortie ( Etape 1 )
             if ( tabclient[tailleEtapesEnMemoire]==nbClients) {
                 break;
             }
@@ -92,13 +97,17 @@ public class Simulation {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
-            System.out.print("\n");
+            System.out.println("---------------------------------------------------------------");
         }
         nettoyage();
 
 
     }
+
+    /**
+     * Setter du nombre de Clients dans la simulation
+     * @param nbClients nombre de clients
+     */
     public void setNbClients(int nbClients) {
         this.nbClients = nbClients;
     }
