@@ -46,6 +46,13 @@ public class Guichet   extends Etape {
         return true;
     }
 
+    /**
+     * Renvoie le nombre de jeton de l'activité
+     * @return le nombre de jetons
+     */
+    public int getNbJetons(){
+        return nbJetons;
+    }
     @Override
     public boolean estSasSortie() {
         return false;

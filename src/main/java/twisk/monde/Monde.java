@@ -1,5 +1,6 @@
 package twisk.monde;
 import java.text.Normalizer;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -77,6 +78,20 @@ public class Monde implements Iterable<Etape> {
         return nbEtapes;
     }
 
+    /**
+     * Renvoie les guichets du monde
+     * @return tableau contenant les guichets
+     */
+    public ArrayList<Guichet> getGuichets() {
+        ArrayList<Guichet> guichets = new ArrayList<>();
+        for (Etape etape : lesEtapes) {
+            if(etape.estUnGuichet()){
+                Guichet guich = (Guichet) etape;
+                guichets.add(guich);
+            }
+        }
+        return guichets;
+    }
     /**
      * Iterator
      */
@@ -184,6 +199,15 @@ public class Monde implements Iterable<Etape> {
 
         // Mettre en majuscule pour respecter la convention C
         return normalized.toUpperCase();
+    }
+
+    /**
+     * Renvoie nom de l'étape à l'indice i
+     * @param index indice de l'étape
+     * @return nom de l'étape
+     */
+    public String getNomEtape(int index) {
+        return getLesEtapes().getEtapeI(index).getNom();
     }
 }
 
