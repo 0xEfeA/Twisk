@@ -2,23 +2,23 @@ package twisk.simulation;
 
 import twisk.monde.Etape;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 
 public class GestionnaireClients  implements Iterable<Client>{
-    private ArrayList<Client> listeClients;
+    private HashMap<Integer,Client> listeClients;
 
     public GestionnaireClients(){
-        this.listeClients = new ArrayList<>();
+        this.listeClients = new HashMap<Integer,Client>();
     }
 
     /**
      * instancie les clients identifiés par leur numéro de processus (numéro de client)
      * @param tabClients
      */
-    void setClient(int... tabClients){
+    public void setClient(int... tabClients){
         for ( int numerosClient : tabClients ) {
-            listeClients.add(new Client(numerosClient));
+            listeClients.put(numerosClient,new Client(numerosClient));
         }
 
     }
@@ -29,7 +29,7 @@ public class GestionnaireClients  implements Iterable<Client>{
      */
     @Override
     public Iterator<Client> iterator() {
-        return listeClients.iterator();
+        return listeClients.values().iterator();
     }
 
     /**
@@ -49,4 +49,22 @@ public class GestionnaireClients  implements Iterable<Client>{
         Client client = listeClients.get(numeroClient);
         client.allerA(etape, rang);
     }
+
+    /**
+     * Renvoie nb clients
+     * @return
+     */
+    public int getNombreClients(){
+        return listeClients.size();
+    }
+
+    /**
+     * Renvoie client à l'indice numeroClient
+     * @param numeroClient
+     * @return
+     */
+    public Client getClient(int numeroClient){
+        return listeClients.get(numeroClient);
+    }
+
 }
