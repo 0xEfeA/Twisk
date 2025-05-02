@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class Simulation {
     private KitC environnement;
-    private int nbClients = 3; // Par défaut on a 5 clients
+    private int nbClients = 3 ; // Par défaut on a 3 clients
     private GestionnaireClients gestionnaireClients;
     /**
      * Constructeur sans argument
