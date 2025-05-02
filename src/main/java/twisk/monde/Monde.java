@@ -222,6 +222,17 @@ public class Monde implements Iterable<Etape> {
     public SasEntree getEntree(){
         return entree;
     }
+    public SasSortie getSortie(){
+        return sortie;
+    }
 
+    /**
+     * Renvoie la i eme étape du monde
+     * @param i indice de l'étape
+     * @return
+     */
+    public Etape getEtapeI(int i){
+        return lesEtapes.getEtapeI(i);
+    }
 }
 

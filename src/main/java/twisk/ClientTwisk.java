@@ -84,6 +84,7 @@ public class ClientTwisk {
         Monde world3 = Mondetest();
 
         simulation.simuler(world1);
+        simulation.simuler(world2);
         //System.out.println(" ");
         //simulation.simuler(world2);
 

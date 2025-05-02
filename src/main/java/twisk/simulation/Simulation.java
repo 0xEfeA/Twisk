@@ -8,6 +8,7 @@ import java.util.ArrayList;
 public class Simulation {
     private KitC environnement;
     private int nbClients = 3; // Par défaut on a 5 clients
+    private GestionnaireClients gestionnaireClients;
     /**
      * Constructeur sans argument
      */
@@ -24,6 +25,8 @@ public class Simulation {
      * @param monde
      */
     public void simuler(Monde monde) {
+        //Instanciation du gestionnaire de clients
+        gestionnaireClients = new GestionnaireClients();
         monde.getLesEtapes().reoganiser(monde.getEntree());
         String codeC = monde.toC();
         environnement.creerFichier(codeC);
@@ -47,7 +50,8 @@ public class Simulation {
         }
         // Récupération de l'adresse du tableau contenant les pid des processus retourné par start_simulation
         int[] tabsimu = start_simulation(nbEtapes, nbGuichets, nbClients, tabJetonsGuichet);
-
+        //Initialisation du gestionnaire avec les PID des clients
+        gestionnaireClients.setClient(tabsimu);
         // Affichage pid avant simulation
         System.out.print("Les clients :");
         for (int i = 0; i < nbClients; i++) {
@@ -62,38 +66,63 @@ public class Simulation {
             int[] tabclient = ou_sont_les_clients(nbEtapes, nbClients);
             // taille de ségment mémoire d'une étape (nbClient + 1 case qui stock le nombre de client en mémoire)
             int tailleEtapesEnMemoire = nbClients+1;
+            //Déplacement des client à travers les étapes
+            for (int i = 0; i < nbEtapes; i++) { //Parcours chaque étape
+                int nbclients = tabclient[i * tailleEtapesEnMemoire];
+                for (int j = 0; j < nbclients; j++) { //PArcours chaque client dans l'étape i
+                    int pid = tabclient[j + 1 + i * tailleEtapesEnMemoire];
+                    if (i == 0) { //Cas 0 càd quand les clients arrivent en entrée
+                        gestionnaireClients.allerA(pid,monde.getEntree(),j);
+                    }else if(i==1){ // Cas où les clients arrivent en sortie
+                        gestionnaireClients.allerA(pid,monde.getSortie(),j);
+                    }else { // Cas autre ( activité ou guichet)
+                    gestionnaireClients.allerA(pid, monde.getEtapeI(i-2),j);
+                }
+                }
+            }
+
+
+
+
+
 
             System.out.println();
-            for (int i = 0; i < nbEtapes-1; i++) {
-                // On récupère le nombre de client de l'étape i
-                int nbClientEtapeI = tabclient[i * tailleEtapesEnMemoire];
-                // Etape 0 SasEntrée
-                if(i==0){
-                    System.out.printf("étape %d (SasEntrée) %d clients : ", i, nbClientEtapeI);
 
-                }// Etape 1 SasSortie (Comme dans le cours)
-                else if(i==1){
-                    System.out.printf("étape %d (SasSortie) %d clients : ", i, nbClientEtapeI);
 
-                }// Les autres étapes sont soit (Activite | ActiviteRestreinte | Guichet)
-                else{
-                    System.out.printf("étape %d (%s) %d clients : ", i, monde.getNomEtape(i-2), nbClientEtapeI);
+                for (int i = 0; i < nbEtapes-1; i++) {
+                    // On récupère le nombre de client de l'étape i
+                    int nbClientEtapeI = tabclient[i * tailleEtapesEnMemoire];
 
+                    // Etape 0 SasEntrée
+                    if(i==0){
+
+                        System.out.printf("étape %d (SasEntrée) %d clients : ", i, nbClientEtapeI);
+
+                    }// Etape 1 SasSortie (Comme dans le cours)
+                    else if(i==1){
+                        System.out.printf("étape %d (SasSortie) %d clients : ", i, nbClientEtapeI);
+
+                    }// Les autres étapes sont soit (Activite | ActiviteRestreinte | Guichet)
+                    else{
+                        System.out.printf("étape %d (%s) %d clients : ", i, monde.getNomEtape(i-2), nbClientEtapeI);
+
+                    }
+                    //Affichage des identifiants des clients à l'étape i
+                    for (int j = 0; j < nbClientEtapeI; j++) {
+                        int pidClientEtapeI = tabclient[i *tailleEtapesEnMemoire + j + 1];
+                        System.out.printf("%d,",pidClientEtapeI);
+
+
+                    }
+                    System.out.print("\n");
                 }
-
-
-                //Affichage des identifiants des clients à l'étape i
-                for (int j = 0; j < nbClientEtapeI; j++) {
-                    int pidClientEtapeI = tabclient[i *tailleEtapesEnMemoire + j + 1];
-                    System.out.printf("%d,",pidClientEtapeI);
-                }
-
                 System.out.print("\n");
-            }
             //Condition d'arrêt : quand tous les clients arrivent à la sortie ( Etape 1 )
             if ( tabclient[tailleEtapesEnMemoire]==nbClients) {
                 break;
             }
+
+
 
             try {
                 Thread.sleep(1000);
@@ -102,6 +131,7 @@ public class Simulation {
             }
             System.out.println("---------------------------------------------------------------");
         }
+        gestionnaireClients.nettoyer();
         nettoyage();
         System.out.println();
         System.out.println("Simulation terminée.\n");

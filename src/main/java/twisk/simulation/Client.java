@@ -37,4 +37,12 @@ public class Client {
     public int getRang() {
         return rang;
     }
+
+    /**
+     * Retourne l'étape du client.
+     * @return etape du client
+     */
+    public Etape getEtape() {
+        return etape;
+    }
 }
