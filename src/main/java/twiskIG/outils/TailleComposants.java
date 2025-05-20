@@ -8,6 +8,9 @@ public class TailleComposants {
     private double largeurActivite = 130;
     private double hauteurActivite = 35;
 
+    private double largeurGuichet = 150;
+    private double hauteurGuichet = 35;
+
     // Constructeur privé pour éviter l'instanciation externe
     private TailleComposants() {}
 
@@ -19,17 +22,31 @@ public class TailleComposants {
         return instance;
     }
 
-    // Getter pour la largeur de l'activité
+
     public double getLargeurActivite() {
         return largeurActivite;
     }
 
-    // Getter pour la hauteur de l'activité
+    public double getLargeurGuichet() {
+        return largeurGuichet;
+    }
+
+    public void setLargeurGuichet(double largeurGuichet) {
+        this.largeurGuichet = largeurGuichet;
+    }
+
+    public double getHauteurGuichet() {
+        return hauteurGuichet;
+    }
+
+    public void setHauteurGuichet(double hauteurGuichet) {
+        this.hauteurGuichet = hauteurGuichet;
+    }
+
     public double getHauteurActivite() {
         return hauteurActivite;
     }
 
-    // Méthodes pour modifier la taille si nécessaire
     public void setLargeurActivite(double largeur) {
         this.largeurActivite = largeur;
     }

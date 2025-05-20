@@ -18,6 +18,7 @@ public abstract class EtapeIG implements Iterable<PointDeControleIG> {
     protected boolean estEntree;
     protected boolean estSortie;
     protected boolean estActivite;
+    protected boolean estGuichet;
 
 
     /**
@@ -38,6 +39,7 @@ public abstract class EtapeIG implements Iterable<PointDeControleIG> {
         this.estEntree = false;
         this.estSortie = false;
         this.estActivite = false;
+        this.estGuichet = false;
     }
 
     public boolean isEstActivite() {
@@ -46,6 +48,14 @@ public abstract class EtapeIG implements Iterable<PointDeControleIG> {
 
     public void setEstActivite(boolean estActivite) {
         this.estActivite = estActivite;
+    }
+
+    public boolean isEstGuichet() {
+        return estGuichet;
+    }
+
+    public void setEstGuichet(boolean estGuichet) {
+        this.estGuichet = estGuichet;
     }
 
     // Getter et Setter pour l'entrée et la sortie

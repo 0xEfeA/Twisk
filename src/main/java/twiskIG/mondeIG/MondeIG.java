@@ -36,6 +36,12 @@ public class MondeIG extends SujetObserve implements Iterable<EtapeIG> {
             System.out.println("Activité ajoutée : " + activite.getIdentifiant());
             notifierObservateurs();
         }
+        if (type.equals("Guichet")) {
+            GuichetIG guichet = new GuichetIG("Guichet " + (this.numEtapes() + 1), 150, 65);
+            etapes.put(guichet.getIdentifiant(), guichet);
+            System.out.println("Guichet ajoutée : " + guichet.getIdentifiant());
+            notifierObservateurs();
+        }
     }
 
     /**

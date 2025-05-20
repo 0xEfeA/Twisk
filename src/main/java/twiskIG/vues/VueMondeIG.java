@@ -54,6 +54,7 @@ public class VueMondeIG extends Pane implements Observateur {
             event.setDropCompleted(success);
             event.consume();
         });
+        this.reagir();
 
     }
 
@@ -79,33 +80,36 @@ public class VueMondeIG extends Pane implements Observateur {
         // Dessiner chaque activité
         for (EtapeIG etape : monde.getEtapes()) {
 
-            //Access the HBox size from VueActiviteIG
-            VueActiviteIG vueActivite = new VueActiviteIG(monde, etape);
+            // Detect if this is a guichet or an activité
+            VueEtapeIG vueEtape;
+            HBox center;
 
-            HBox center = vueActivite.getCenter();
+            if (etape.isEstGuichet()) {
+                vueEtape = new VueGuichetIG(monde, etape);
+            } else {
+                vueEtape = new VueActiviteIG(monde, etape);
+            }
+
+            center = vueEtape.getCenter();
+
             double hBoxWidth = center.getPrefWidth();
             double hBoxHeight = center.getPrefHeight();
 
-            //Calculate the new width and height without modifying etape directly
+            // Calculate dimensions
             double newWidth = etape.getLargeur();
             double newHeight = etape.getHauteur();
 
-            // Adjust dimensions based on hBox size
             if (hBoxWidth > 130) {
-                newWidth = etape.getLargeur() + (hBoxWidth - 130) + 2;
+                newWidth += (hBoxWidth - 130) + 2;
             }
             if (hBoxHeight > 35) {
-                newHeight = etape.getHauteur() + (hBoxHeight - 35) + 5;
+                newHeight += (hBoxHeight - 35) + 5;
             }
 
-            // Create the rectangle for the activity with the updated size
-            Rectangle rect = new Rectangle(
-                    etape.getX(),
-                    etape.getY(),
-                    newWidth,
-                    newHeight
-            );
+            // Create rectangle
+            Rectangle rect = new Rectangle(etape.getX(), etape.getY(), newWidth, newHeight);
 
+            // Icons
             Image enter = new Image(getClass().getResourceAsStream("/images/enter.png"), 15, 15, true, true);
             ImageView enterIcon = new ImageView(enter);
 
@@ -114,18 +118,16 @@ public class VueMondeIG extends Pane implements Observateur {
 
             StackPane iconBox = new StackPane();
             iconBox.setPrefSize(15, 15);
-            iconBox.setStyle("-fx-background-color: white; ");
+            iconBox.setStyle("-fx-background-color: white;");
             if (etape.estEntree() && etape.isEstActivite()) {
                 iconBox.getChildren().add(enterIcon);
             } else if (etape.estSortie() && etape.isEstActivite()) {
                 iconBox.getChildren().add(sortieIcon);
             }
 
-            // Position icon at top-right of the rectangle
             iconBox.setLayoutX(etape.getX() + newWidth - 20);
             iconBox.setLayoutY(etape.getY() + 2);
 
-            // LED Border
             DropShadow shadow = new DropShadow();
             shadow.setColor(javafx.scene.paint.Color.LIGHTBLUE);
             shadow.setRadius(10);
@@ -134,40 +136,37 @@ public class VueMondeIG extends Pane implements Observateur {
 
             rect.setEffect(shadow);
             iconBox.setEffect(shadow);
+
             if (monde.getEtapesSelectionnees().contains(etape)) {
                 rect.setStyle("-fx-fill: white; -fx-stroke: red; -fx-stroke-width: 3;");
             } else {
                 rect.setStyle("-fx-fill: white; -fx-stroke: lightblue; -fx-stroke-width: 2;");
             }
+
             rect.setArcWidth(10);
             rect.setArcHeight(10);
-
             rect.setOnMouseClicked((MouseEvent event) -> monde.gererClicEtape(etape));
-            this.getChildren().addAll(rect,iconBox);
+            this.getChildren().addAll(rect, iconBox);
 
-            //the position for the HBox to be centered inside the rectangle
+            // Centering the VueEtapeIG
             double centerX = etape.getX() + (newWidth - hBoxWidth) / 2;
             double centerY = etape.getY() + (newHeight - hBoxHeight) / 3;
+            vueEtape.relocate(centerX, centerY);
+            this.getChildren().add(vueEtape);
 
-            // Relocation
-            vueActivite.relocate(centerX, centerY);
-
-            this.getChildren().add(vueActivite);
-
-            // Ajouter les points de contrôle de cette étape
+            // Points de contrôle
             ArrayList<PointDeControleIG> newpoints = new ArrayList<>();
-            newpoints.add(new PointDeControleIG((int) (etape.getX() + newWidth / 2), etape.getY(), etape)); //up
-            newpoints.add(new PointDeControleIG((int) (etape.getX() + newWidth / 2), (int) (etape.getY() + newHeight), etape)); //down
-            newpoints.add(new PointDeControleIG(etape.getX(), (int) (etape.getY() + newHeight / 2), etape));  //left
-            newpoints.add(new PointDeControleIG((int)(etape.getX() + newWidth), (int) (etape.getY() + newHeight / 2), etape)); //right
+            newpoints.add(new PointDeControleIG((int) (etape.getX() + newWidth / 2), etape.getY(), etape)); // up
+            newpoints.add(new PointDeControleIG((int) (etape.getX() + newWidth / 2), (int) (etape.getY() + newHeight), etape)); // down
+            newpoints.add(new PointDeControleIG(etape.getX(), (int) (etape.getY() + newHeight / 2), etape)); // left
+            newpoints.add(new PointDeControleIG((int)(etape.getX() + newWidth), (int) (etape.getY() + newHeight / 2), etape)); // right
             etape.setPointsDeControle(newpoints);
 
-            ArrayList<PointDeControleIG> points = etape.getPointsDeControle();
-            for (PointDeControleIG pdc : points) {
-                VuePointDeControleIG vuePdc = new VuePointDeControleIG(pdc,monde);
-                this.getChildren().add(vuePdc);
+            for (PointDeControleIG pdc : etape.getPointsDeControle()) {
+                this.getChildren().add(new VuePointDeControleIG(pdc, monde));
             }
         }
+
     }
 
 

@@ -1,3 +1,5 @@
+package twiskIG;
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -7,7 +9,7 @@ import twiskIG.vues.VueMenu;
 import twiskIG.vues.VueOutils;
 import twiskIG.vues.VueMondeIG;
 
-public class MainTwisk extends Application {
+public class MainTwiskIG extends Application {
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Twisk IG");
