@@ -184,6 +184,7 @@ public class ClientTwisk {
         Monde world2 = MondeSixEtapes();
         Monde world3 = Mondetest();
 
+        //simulation.setNbClients(5);
         simulation.simuler(world1);
         simulation.simuler(world2);
         //System.out.println(" ");

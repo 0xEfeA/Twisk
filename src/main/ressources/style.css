@@ -1,0 +1,55 @@
+/* Menu Bar background color */
+.menu-bar {
+    -fx-background-color: cyan;
+    -fx-padding: 5px;
+}
+
+/* Menu items - general style */
+.menu {
+    -fx-text-fill: black;
+    -fx-font-weight: bold;
+}
+
+/* MenuItem general styling */
+.menu-item {
+    -fx-font-weight: bold;
+    -fx-text-fill: black;
+    -fx-font-size: 12px;
+    -fx-padding: 10px 15px;
+}
+
+/* On hovering over menu items */
+.menu-item:hover {
+    -fx-background-color: #5C9EDE;
+    -fx-text-fill: white;
+}
+
+/* Menu label (Fichier, Édition) */
+.menu .label {
+    -fx-text-fill: black;
+    -fx-font-weight: bold;
+}
+
+/* Hover effect for the main menu */
+.menu:hover {
+    -fx-background-color: #357ABD;
+}
+
+/* SubMenu (the drop-down part of the menu) */
+.menu .menu-item .menu {
+    -fx-background-color: #FFFFFF;
+    -fx-padding: 0;
+}
+
+/* SubMenu item (dropdown item) */
+.menu .menu-item .menu .menu-item {
+    -fx-font-size: 12px;
+    -fx-padding: 8px 12px;
+    -fx-background-color: #F1F1F1;
+}
+
+/* On hover of submenu items */
+.menu .menu-item .menu .menu-item:hover {
+    -fx-background-color: #A9C9F5;
+    -fx-text-fill: black;
+}
