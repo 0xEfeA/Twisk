@@ -20,10 +20,36 @@ public class SimulationIG {
     public SimulationIG(MondeIG mondeIG) {
         this.mondeIG = mondeIG;
     }
-    public void verifierMondeIG() throws MondeException {
 
+    /**
+     * Vérifie que le monde est bien construit
+     * @throws MondeException
+     */
+    public void verifierMondeIG() throws MondeException {
+        setActiviteRestreinte(); // Passe les activités après un guichet en restreinte
+        if(!verifierEntreeSortie()){
+            throw new MondeException("Une activité n'est pas reliée à une entrée ou sortie");
+        }
+
+        if(!verifierGrapheConnecte()){
+            throw new MondeException("Une activité n'est pas reliée correctement dans le monde");
+        }
     }
 
+            /**
+             * Si une activité est précédé d'un guichet elle devient restreinte
+             */
+            public void setActiviteRestreinte(){
+                setPredecesseur();
+                setSuccesseur();
+                for (EtapeIG etape : mondeIG.getEtapes()) {
+                    for(EtapeIG pred : etape.getPredecesseurs()){
+                        if(pred.isEstGuichet()){
+                            etape.setEstActiviteRestreinte(true);
+                        }
+                    }
+                }
+            }
     /**
      * Parcours toutes les étapes et guichet et vérifie qu'ils sont reliées à une entrée et une sortie minimum
      * @return
@@ -47,6 +73,20 @@ public class SimulationIG {
         return true;
     }
 
+    /**
+     * Vérifie que le monde (graphe) n'a pas d'activité ou guichet qui traine reliée à rien
+     * @return
+     */
+    public boolean verifierGrapheConnecte(){
+        for(EtapeIG etape : mondeIG.getEtapes()){
+            if(!etape.estEntree() && etape.getPredecesseurs().isEmpty()){ // Cas où c'est pas une entrée et n'a pas de pred
+                return false;
+            }if(!etape.estSortie() && etape.getSuccesseurs().isEmpty()){ // Cas où c'est pas une sortie et n'a pas de succ
+                return false;
+            }
+        }
+        return true;
+    }
     /**
      * Parcours récursivement tous les prédécesseurs pour trouver une entrée (DFS cf : cours d'algo)
      * @param etape

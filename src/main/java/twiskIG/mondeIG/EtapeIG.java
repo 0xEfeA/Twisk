@@ -21,6 +21,7 @@ public abstract class EtapeIG implements Iterable<PointDeControleIG> {
     protected boolean estGuichet;
     protected ArrayList<EtapeIG> predecesseurs;
     protected ArrayList<EtapeIG> successeurs;
+    protected boolean estActiviteRestreinte;
     /**
      * Constructor for EtapeIG.
      * @param nom The name of the step.
@@ -42,8 +43,14 @@ public abstract class EtapeIG implements Iterable<PointDeControleIG> {
         this.estGuichet = false;
         this.predecesseurs = new ArrayList<>();
         this.successeurs = new ArrayList<>();
+        this.estActiviteRestreinte = false;
     }
-
+    public boolean estActiviteRestreinte() {
+        return estActiviteRestreinte;
+    }
+    public void setEstActiviteRestreinte(boolean estActiviteRestreinte) {
+        this.estActiviteRestreinte = estActiviteRestreinte;
+    }
     public boolean isEstActivite() {
         return estActivite;
     }
