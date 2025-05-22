@@ -32,6 +32,8 @@ public class ArcIG {
         estSelectionne = !estSelectionne;
     }
 
+
+
     @Override
     public String toString() {
         return "ArcIG{" +

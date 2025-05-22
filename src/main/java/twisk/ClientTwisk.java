@@ -111,7 +111,7 @@ public class ClientTwisk {
     private static Monde MondeTroisEtapes(){
         Monde world = new Monde();
         Etape activite1 = new Activite("zoo",6,3);
-        Etape guichet = new Guichet("guichet_tobogan",1);
+        Etape guichet = new Guichet("guichet_tobogan",2);
         Etape activite2 = new ActiviteRestreinte("tobogan",4,2);
         Etape activite3 = new Activite("piscine",5,2);
 
