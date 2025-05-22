@@ -63,13 +63,18 @@ public class VueMenu extends MenuBar implements Observateur {
             this.getMenus().get(1).getItems().get(1).setDisable(false); //renommer
             this.getMenus().get(3).getItems().getFirst().setDisable(false); //delai
             this.getMenus().get(3).getItems().get(1).setDisable(false); //ecart
-            this.getMenus().get(3).getItems().get(2).setDisable(false); //nbjetons
         } else {
             this.getMenus().get(1).getItems().get(1).setDisable(true);
             this.getMenus().get(3).getItems().getFirst().setDisable(true);
             this.getMenus().get(3).getItems().get(1).setDisable(true);
-            this.getMenus().get(3).getItems().get(2).setDisable(true);
+            this.getMenus().get(3).getItems().get(2).setDisable(true); //nbjetons
         }
+        if (monde.getEtapesSelectionnees().size() == 1 && monde.getEtapesSelectionnees().getFirst().isEstGuichet()) {
+            this.getMenus().get(3).getItems().get(2).setDisable(false);
+            this.getMenus().get(3).getItems().getFirst().setDisable(true);
+            this.getMenus().get(3).getItems().get(1).setDisable(true);
+        }
+
     }
 
 }
