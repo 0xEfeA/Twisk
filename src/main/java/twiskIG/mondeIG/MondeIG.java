@@ -446,5 +446,7 @@ public class MondeIG extends SujetObserve implements Iterable<EtapeIG> {
     }
 
 
-
+    public  void ajouterEtape(EtapeIG etape) {
+        etapes.put(etape.identifiant, etape);
+    }
 }
