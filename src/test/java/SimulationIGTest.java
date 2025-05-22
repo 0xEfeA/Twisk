@@ -66,4 +66,22 @@ class SimulationIGTest {
         SimulationIG simulation = new SimulationIG(monde);
         assertDoesNotThrow(simulation::verifierMondeIG,"Le monde est normalement bien formé");
     }
+    @Test
+    void testSimuler() throws MondeException {
+        MondeIG monde = new MondeIG();
+        EtapeIG entree = new ActiviteIG("entrée",5,5);
+        EtapeIG milieu = new ActiviteIG("milieu",5,5);
+        EtapeIG sortie = new ActiviteIG("sortie",5,5);
+        entree.setSuccesseurs(milieu);
+        milieu.setPredecesseurs(entree);
+        sortie.setPredecesseurs(milieu);
+        entree.setEntree(true);
+        sortie.setSortie(true);
+        milieu.setSuccesseurs(sortie);
+        monde.ajouterEtape(entree);
+        monde.ajouterEtape(milieu);
+        monde.ajouterEtape(sortie);
+        SimulationIG simulation = new SimulationIG(monde);
+        simulation.simuler();
+    }
 }

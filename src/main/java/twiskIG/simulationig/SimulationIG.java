@@ -1,6 +1,7 @@
 package twiskIG.simulationig;
 
 import twisk.monde.*;
+import twisk.simulation.Simulation;
 import twiskIG.exceptions.MondeException;
 import twiskIG.mondeIG.ArcIG;
 import twiskIG.mondeIG.EtapeIG;
@@ -19,6 +20,17 @@ public class SimulationIG {
      */
     public SimulationIG(MondeIG mondeIG) {
         this.mondeIG = mondeIG;
+    }
+
+    /**
+     * Verifie le monde créer dans l'interface, créer le monde dans le modèle puis lance la simulation
+     * @throws MondeException
+     */
+    public void simuler() throws MondeException {
+        verifierMondeIG();
+        Monde monde = creerMonde();
+        Simulation simu = new Simulation();
+        simu.simuler(monde);
     }
 
     /**
