@@ -15,11 +15,12 @@ public class VueOutils extends BorderPane implements Observateur {
     private MondeIG monde;
     private Button addActivity;
     private Button addGuichet;
+    private Button simulate;
 
     public VueOutils(MondeIG monde) {
         this.monde = monde;
         this.monde.ajouterObservateur(this);
-
+        simulate = new Button();
         addActivity = new Button();
         addGuichet = new Button();
 
@@ -29,17 +30,19 @@ public class VueOutils extends BorderPane implements Observateur {
         Image add_gui = new Image(getClass().getResourceAsStream("/images/add_guichet.png"), 40, 40, true, true);
         addGuichet.setGraphic(new ImageView(add_gui));
 
+        Image simu = new Image(getClass().getResourceAsStream("/images/simuler.png"), 40, 40, true, true);
+        simulate.setGraphic(new ImageView(simu));
         // Set fixed size for both buttons
         setButtonSize(addActivity);
         setButtonSize(addGuichet);
-
+        setButtonSize(simulate);
         // Tooltips
         Tooltip.install(addActivity, new Tooltip("Ajouter une nouvelle activité"));
         Tooltip.install(addGuichet, new Tooltip("Ajouter un nouveau guichet"));
-
+        Tooltip.install(simulate,new Tooltip("Lancer la simulation"));
         addActivity.setOnAction(new EcouteurBtnAddActivite(monde));
         addGuichet.setOnAction(new EcouteurBtnAddGuichet(monde));
-
+        simulate.setOnAction(new EcouteurSimuler(monde));
 
         // Bottom bar with spacing
         HBox bottomBar = new HBox();
@@ -50,7 +53,7 @@ public class VueOutils extends BorderPane implements Observateur {
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
-        bottomBar.getChildren().addAll(addActivity, spacer, addGuichet);
+        bottomBar.getChildren().addAll(addActivity, simulate, addGuichet);
         this.setBottom(bottomBar);
     }
 

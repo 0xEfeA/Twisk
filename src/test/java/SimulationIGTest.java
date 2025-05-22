@@ -1,9 +1,11 @@
 import org.junit.jupiter.api.Test;
 import twisk.monde.GestionnaireEtapes;
+import twisk.monde.Guichet;
 import twisk.simulation.Simulation;
 import twiskIG.exceptions.MondeException;
 import twiskIG.mondeIG.ActiviteIG;
 import twiskIG.mondeIG.EtapeIG;
+import twiskIG.mondeIG.GuichetIG;
 import twiskIG.mondeIG.MondeIG;
 import twiskIG.simulationig.SimulationIG;
 
@@ -71,16 +73,21 @@ class SimulationIGTest {
         MondeIG monde = new MondeIG();
         EtapeIG entree = new ActiviteIG("entrée",5,5);
         EtapeIG milieu = new ActiviteIG("milieu",5,5);
+        EtapeIG guichet = new GuichetIG("guichet",5,5);
         EtapeIG sortie = new ActiviteIG("sortie",5,5);
         entree.setSuccesseurs(milieu);
         milieu.setPredecesseurs(entree);
-        sortie.setPredecesseurs(milieu);
+        guichet.setPredecesseurs(milieu);
+        guichet.setSuccesseurs(sortie);
+        sortie.setPredecesseurs(guichet);
         entree.setEntree(true);
         sortie.setSortie(true);
-        milieu.setSuccesseurs(sortie);
+        milieu.setSuccesseurs(guichet);
         monde.ajouterEtape(entree);
-        monde.ajouterEtape(milieu);
+
+        monde.ajouterEtape(guichet);
         monde.ajouterEtape(sortie);
+        monde.ajouterEtape(milieu);
         SimulationIG simulation = new SimulationIG(monde);
         simulation.simuler();
     }

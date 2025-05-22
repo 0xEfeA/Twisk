@@ -108,6 +108,8 @@ public class MondeIG extends SujetObserve implements Iterable<EtapeIG> {
 
         //ajouter l'arc si aucune exception n'a été levée
         arcs.add(new ArcIG(pt1, pt2));
+        pt1.getEtape().setSuccesseurs(pt2.getEtape());
+        pt2.getEtape().setPredecesseurs(pt1.getEtape());
     }
 
     /**
@@ -449,4 +451,7 @@ public class MondeIG extends SujetObserve implements Iterable<EtapeIG> {
     public  void ajouterEtape(EtapeIG etape) {
         etapes.put(etape.identifiant, etape);
     }
+
+
+
 }

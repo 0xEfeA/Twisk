@@ -23,13 +23,17 @@ public class SimulationIG {
     }
 
     /**
-     * Verifie le monde créer dans l'interface, créer le monde dans le modèle puis lance la simulation
+     * Verifie le monde créé dans l'interface, créer le monde dans le modèle puis lance la simulation
      * @throws MondeException
      */
     public void simuler() throws MondeException {
+
         verifierMondeIG();
         Monde monde = creerMonde();
+        monde.getLesEtapes().reoganiser(monde.getEntree());
+
         Simulation simu = new Simulation();
+        System.out.println(mondeIG);
         simu.simuler(monde);
     }
 
@@ -88,14 +92,16 @@ public class SimulationIG {
         if(!verifierGrapheConnecte()){
             throw new MondeException("Une activité n'est pas reliée correctement dans le monde");
         }
+        if(mondeIG.getEtapes().isEmpty()){
+            throw new MondeException("Le monde est vide");
+        }
     }
 
             /**
              * Si une activité est précédé d'un guichet elle devient restreinte
              */
             public void setActiviteRestreinte(){
-                setPredecesseur();
-                setSuccesseur();
+
                 for (EtapeIG etape : mondeIG.getEtapes()) {
                     for(EtapeIG pred : etape.getPredecesseurs()){
                         if(pred.estUnGuichet() && etape.estUneActivite()){
@@ -104,14 +110,16 @@ public class SimulationIG {
                     }
                 }
             }
+
+
+
+
     /**
      * Parcours toutes les étapes et guichet et vérifie qu'ils sont reliées à une entrée et une sortie minimum
      * @return
      */
     public boolean verifierEntreeSortie(){
-        //On construite les listes de pred et succ
-        setPredecesseur();
-        setSuccesseur();
+
 
         for(EtapeIG etape : mondeIG.getEtapes()){
             if(!etape.estEntree() && !etape.estSortie()){

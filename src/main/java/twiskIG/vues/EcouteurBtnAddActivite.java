@@ -14,5 +14,5 @@ public class EcouteurBtnAddActivite implements EventHandler<ActionEvent> {
     @Override
     public void handle(ActionEvent event) {
         monde.ajouter("Activité");
-    }
+        }
 }

@@ -172,7 +172,10 @@ public abstract class EtapeIG implements Iterable<PointDeControleIG> {
      * @param etapeIG
      */
     public void setSuccesseurs(EtapeIG etapeIG) {
-        successeurs.add(etapeIG);
+        if(!successeurs.contains(etapeIG)) {
+            successeurs.add(etapeIG);
+        }
+
     }
 
     public ArrayList<EtapeIG> getPredecesseurs() {
