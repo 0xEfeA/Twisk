@@ -15,9 +15,11 @@ public class VueMenu extends MenuBar implements Observateur {
         this.monde.ajouterObservateur(this);
 
         Menu menuFichier = new Menu("Fichier");
+        MenuItem initialise = new MenuItem("New Monde");
+        initialise.setOnAction(event ->monde.supprimerToutesLesEtapes());
         MenuItem quitter = new MenuItem("Quitter");
         quitter.setOnAction(event -> Platform.exit());
-        menuFichier.getItems().add(quitter);
+        menuFichier.getItems().addAll(initialise,quitter);
 
         Menu menuEdition = new Menu("Édition");
         MenuItem supprimer = new MenuItem("Supprimer");
@@ -47,8 +49,10 @@ public class VueMenu extends MenuBar implements Observateur {
          delai.setOnAction(event->monde.setDelai());
          MenuItem ecart = new MenuItem("Ecart");
          ecart.setOnAction(event->monde.setEcart());
+        MenuItem nbjetons = new MenuItem("NbJetons");
+        nbjetons.setOnAction(event->monde.setNbJetons());
 
-         parametre.getItems().addAll(delai,ecart);
+         parametre.getItems().addAll(delai,ecart,nbjetons);
 
         this.getMenus().addAll(menuFichier, menuEdition,menuMonde,parametre);
     }
@@ -59,10 +63,12 @@ public class VueMenu extends MenuBar implements Observateur {
             this.getMenus().get(1).getItems().get(1).setDisable(false); //renommer
             this.getMenus().get(3).getItems().getFirst().setDisable(false); //delai
             this.getMenus().get(3).getItems().get(1).setDisable(false); //ecart
+            this.getMenus().get(3).getItems().get(2).setDisable(false); //nbjetons
         } else {
             this.getMenus().get(1).getItems().get(1).setDisable(true);
             this.getMenus().get(3).getItems().getFirst().setDisable(true);
             this.getMenus().get(3).getItems().get(1).setDisable(true);
+            this.getMenus().get(3).getItems().get(2).setDisable(true);
         }
     }
 

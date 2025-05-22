@@ -11,7 +11,7 @@ public class VueGuichetIG extends VueEtapeIG {
         super(monde, etape);
 
         center = new HBox();
-        center.setSpacing(5);
+        center.setSpacing(3);
         center.setPadding(new Insets(5));
         center.setStyle("-fx-background-color: #EDEDED; -fx-border-color: #009688; -fx-border-width: 2px;");
 
@@ -19,7 +19,7 @@ public class VueGuichetIG extends VueEtapeIG {
         center.setPrefSize(taille.getLargeurGuichet(), taille.getHauteurGuichet());
 
         // Add slot visuals
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 10; i++) {
             HBox slot = new HBox();
             slot.setPrefSize(30, 40);
             slot.setStyle("-fx-border-color: black; -fx-border-width: 1px; -fx-background-color: white;");

@@ -119,9 +119,9 @@ public class VueMondeIG extends Pane implements Observateur {
             StackPane iconBox = new StackPane();
             iconBox.setPrefSize(15, 15);
             iconBox.setStyle("-fx-background-color: white;");
-            if (etape.estEntree() && etape.isEstActivite()) {
+            if (etape.estEntree() && (etape.isEstActivite() || etape.isEstGuichet())) {
                 iconBox.getChildren().add(enterIcon);
-            } else if (etape.estSortie() && etape.isEstActivite()) {
+            } else if (etape.estSortie() && etape.isEstActivite() ) {
                 iconBox.getChildren().add(sortieIcon);
             }
 

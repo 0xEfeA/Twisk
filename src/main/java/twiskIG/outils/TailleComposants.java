@@ -8,7 +8,7 @@ public class TailleComposants {
     private double largeurActivite = 130;
     private double hauteurActivite = 35;
 
-    private double largeurGuichet = 150;
+    private double largeurGuichet = 200;
     private double hauteurGuichet = 35;
 
     // Constructeur privé pour éviter l'instanciation externe

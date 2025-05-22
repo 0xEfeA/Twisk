@@ -6,6 +6,7 @@ import javafx.animation.PauseTransition;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextInputDialog;
 import javafx.util.Duration;
+import twiskIG.outils.FabriqueIdentifiant;
 
 import java.util.*;
 
@@ -20,8 +21,8 @@ public class MondeIG extends SujetObserve implements Iterable<EtapeIG> {
      */
     public MondeIG() {
         this.etapes = new HashMap<>();
-        ActiviteIG defaut = new ActiviteIG("Activité 1", 150, 65);
-        this.etapes.put(defaut.getIdentifiant(), defaut);
+        //ActiviteIG defaut = new ActiviteIG("Activité 1", 150, 65);
+        //this.etapes.put(defaut.getIdentifiant(), defaut);
         this.arcs = new ArrayList<>();
     }
 
@@ -33,13 +34,13 @@ public class MondeIG extends SujetObserve implements Iterable<EtapeIG> {
         if (type.equals("Activité")) {
             ActiviteIG activite = new ActiviteIG("Activité " + (this.numEtapes() + 1), 150, 65);
             etapes.put(activite.getIdentifiant(), activite);
-            System.out.println("Activité ajoutée : " + activite.getIdentifiant());
+            System.out.println("Activité ajoutée  " ); //+ activite.getIdentifiant()
             notifierObservateurs();
         }
         if (type.equals("Guichet")) {
-            GuichetIG guichet = new GuichetIG("Guichet " + (this.numEtapes() + 1), 150, 65);
+            GuichetIG guichet = new GuichetIG("Guichet ", 150, 65);
             etapes.put(guichet.getIdentifiant(), guichet);
-            System.out.println("Guichet ajoutée : " + guichet.getIdentifiant());
+            System.out.println("Guichet ajoutée " );
             notifierObservateurs();
         }
     }
@@ -189,6 +190,16 @@ public class MondeIG extends SujetObserve implements Iterable<EtapeIG> {
 
         notifierObservateurs();
     }
+
+    public void supprimerToutesLesEtapes() {
+        arcs.clear();
+        etapes.clear();
+
+        FabriqueIdentifiant.getInstance().resetIdentifiant();
+
+        notifierObservateurs();
+    }
+
 
 
 
@@ -342,7 +353,7 @@ public class MondeIG extends SujetObserve implements Iterable<EtapeIG> {
             result.ifPresent(input -> {
                 try {
                     int delai = Integer.parseInt(input);
-                    addDelaiToActivity(delai);
+                    addDelaiToActivity(delai,etape);
                     notifierObservateurs();
                 } catch (NumberFormatException e) {
                     afficherInfos("Entrée invalide, veuillez entrer un nombre.");
@@ -365,7 +376,7 @@ public class MondeIG extends SujetObserve implements Iterable<EtapeIG> {
             result.ifPresent(input -> {
                 try {
                     int ecart = Integer.parseInt(input);
-                    addEcartToActivity(ecart);
+                    addEcartToActivity(ecart,etape);
                     notifierObservateurs();
                 } catch (NumberFormatException e) {
                     afficherInfos("Entrée invalide, veuillez entrer un nombre.");
@@ -376,23 +387,59 @@ public class MondeIG extends SujetObserve implements Iterable<EtapeIG> {
         }
     }
 
-    private void addDelaiToActivity(int delai) throws IncorrectDelaiEcartException {
+
+    public void setNbJetons() {
+        if (getEtapesSelectionnees().size() == 1) {
+            EtapeIG etape = getEtapesSelectionnees().get(0);
+
+            TextInputDialog dialog = new TextInputDialog();
+            dialog.setTitle("Set nombre de Jetons");
+            dialog.setHeaderText("Entrez un nouveau Nombre de Jetons");
+            Optional<String> result = dialog.showAndWait();
+
+            result.ifPresent(input -> {
+                try {
+                    int ecart = Integer.parseInt(input);
+                    addNombreJetonsToGuichet(ecart,etape);
+                    notifierObservateurs();
+                } catch (NumberFormatException e) {
+                    afficherInfos("Entrée invalide, veuillez entrer un nombre.");
+                } catch (IncorrectDelaiEcartException e) {
+                    afficherInfos(e.getMessage());
+                }
+            });
+        }
+    }
+
+
+    private void addDelaiToActivity(int delai, EtapeIG etape) throws IncorrectDelaiEcartException {
         if (delai < 1) {
             throw new IncorrectDelaiEcartException("Délai ne peut pas être inférieur à 1");
         }
-        for (EtapeIG etape : this.getEtapes()) {
-            if (etape.isEstActivite()) {
-                ((ActiviteIG) etape).setDelai(delai);
+        for (EtapeIG etapes : this.getEtapes()) {
+            if (etapes.isEstActivite() && etapes.identifiant.equals(etape.identifiant)) {
+                ((ActiviteIG) etapes).setDelai(delai);
             }
         }
     }
 
-    private void addEcartToActivity(int ecart) throws IncorrectDelaiEcartException {
+    private void addNombreJetonsToGuichet(int nombre, EtapeIG etape) throws IncorrectDelaiEcartException {
+        if (nombre < 1) {
+            throw new IncorrectDelaiEcartException("Délai ne peut pas être inférieur à 1");
+        }
+        for (EtapeIG etapes : this.getEtapes()) {
+            if (etapes.isEstGuichet() && etapes.identifiant.equals(etape.identifiant)) {
+                ((GuichetIG) etapes).setNbJetons(nombre);
+            }
+        }
+    }
+
+    private void addEcartToActivity(int ecart,EtapeIG etapes) throws IncorrectDelaiEcartException {
         if (ecart < 1) {
             throw new IncorrectDelaiEcartException("Écart ne peut pas être inférieur à 1");
         }
         for (EtapeIG etape : this.getEtapes()) {
-            if (etape.isEstActivite()) {
+            if (etape.isEstActivite()&& etape.identifiant.equals(etapes.identifiant)) {
                 ((ActiviteIG) etape).setEcart(ecart);
             }
         }
