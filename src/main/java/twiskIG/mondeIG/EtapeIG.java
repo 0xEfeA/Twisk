@@ -45,22 +45,23 @@ public abstract class EtapeIG implements Iterable<PointDeControleIG> {
         this.successeurs = new ArrayList<>();
         this.estActiviteRestreinte = false;
     }
-    public boolean estActiviteRestreinte() {
-        return estActiviteRestreinte;
+    public boolean estUneActiviteRestreinte() {
+        return false;
     }
     public void setEstActiviteRestreinte(boolean estActiviteRestreinte) {
         this.estActiviteRestreinte = estActiviteRestreinte;
     }
-    public boolean isEstActivite() {
-        return estActivite;
+    public boolean estUneActivite() {
+        return false;
     }
+
 
     public void setEstActivite(boolean estActivite) {
         this.estActivite = estActivite;
     }
 
-    public boolean isEstGuichet() {
-        return estGuichet;
+    public boolean estUnGuichet() {
+        return false;
     }
 
     public void setEstGuichet(boolean estGuichet) {

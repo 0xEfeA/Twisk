@@ -14,7 +14,10 @@ public class GuichetIG extends EtapeIG{
         this.estGuichet = true;
         this.setNbJetons(1);
     }
-
+    @Override
+    public boolean estUnGuichet() {
+        return true;
+    }
     public int getNbJetons() {
         return nbJetons;
     }

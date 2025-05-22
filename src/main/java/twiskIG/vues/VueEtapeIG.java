@@ -21,11 +21,11 @@ public abstract class VueEtapeIG extends VBox {
     public VueEtapeIG(MondeIG monde, EtapeIG etape) {
         this.step = etape;
 
-        if (etape.isEstActivite()) {
+        if (etape.estUneActivite()) {
             this.label = new Label(etape.getNom() + ":    " + ((ActiviteIG)etape).getDelai() + " +/- " + ((ActiviteIG)etape).getEcart());
         }
 
-        if (etape.isEstGuichet()) {
+        if (etape.estUnGuichet()) {
             this.label = new Label(etape.getNom() + ":    " + ((GuichetIG)etape).getNbJetons() + " Jetons ");
         }
 

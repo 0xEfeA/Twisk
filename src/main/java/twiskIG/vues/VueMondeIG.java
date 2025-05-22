@@ -84,7 +84,7 @@ public class VueMondeIG extends Pane implements Observateur {
             VueEtapeIG vueEtape;
             HBox center;
 
-            if (etape.isEstGuichet()) {
+            if (etape.estUnGuichet()) {
                 vueEtape = new VueGuichetIG(monde, etape);
             } else {
                 vueEtape = new VueActiviteIG(monde, etape);
@@ -119,9 +119,9 @@ public class VueMondeIG extends Pane implements Observateur {
             StackPane iconBox = new StackPane();
             iconBox.setPrefSize(15, 15);
             iconBox.setStyle("-fx-background-color: white;");
-            if (etape.estEntree() && (etape.isEstActivite() || etape.isEstGuichet())) {
+            if (etape.estEntree() && (etape.estUneActivite() || etape.estUnGuichet())) {
                 iconBox.getChildren().add(enterIcon);
-            } else if (etape.estSortie() && etape.isEstActivite() ) {
+            } else if (etape.estSortie() && etape.estUneActivite() ) {
                 iconBox.getChildren().add(sortieIcon);
             }
 

@@ -5,7 +5,6 @@ import twiskIG.mondeIG.ArcIG;
 import twiskIG.mondeIG.EtapeIG;
 import twiskIG.mondeIG.MondeIG;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -44,7 +43,7 @@ public class SimulationIG {
                 setSuccesseur();
                 for (EtapeIG etape : mondeIG.getEtapes()) {
                     for(EtapeIG pred : etape.getPredecesseurs()){
-                        if(pred.isEstGuichet()){
+                        if(pred.estUnGuichet() && etape.estUneActivite()){
                             etape.setEstActiviteRestreinte(true);
                         }
                     }

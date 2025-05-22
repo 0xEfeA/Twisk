@@ -417,7 +417,7 @@ public class MondeIG extends SujetObserve implements Iterable<EtapeIG> {
             throw new IncorrectDelaiEcartException("Délai ne peut pas être inférieur à 1");
         }
         for (EtapeIG etapes : this.getEtapes()) {
-            if (etapes.isEstActivite() && etapes.identifiant.equals(etape.identifiant)) {
+            if (etapes.estUneActivite() && etapes.identifiant.equals(etape.identifiant)) {
                 ((ActiviteIG) etapes).setDelai(delai);
             }
         }
@@ -428,7 +428,7 @@ public class MondeIG extends SujetObserve implements Iterable<EtapeIG> {
             throw new IncorrectDelaiEcartException("Délai ne peut pas être inférieur à 1");
         }
         for (EtapeIG etapes : this.getEtapes()) {
-            if (etapes.isEstGuichet() && etapes.identifiant.equals(etape.identifiant)) {
+            if (etapes.estUnGuichet() && etapes.identifiant.equals(etape.identifiant)) {
                 ((GuichetIG) etapes).setNbJetons(nombre);
             }
         }
@@ -439,7 +439,7 @@ public class MondeIG extends SujetObserve implements Iterable<EtapeIG> {
             throw new IncorrectDelaiEcartException("Écart ne peut pas être inférieur à 1");
         }
         for (EtapeIG etape : this.getEtapes()) {
-            if (etape.isEstActivite()&& etape.identifiant.equals(etapes.identifiant)) {
+            if (etape.estUneActivite()&& etape.identifiant.equals(etapes.identifiant)) {
                 ((ActiviteIG) etape).setEcart(ecart);
             }
         }
