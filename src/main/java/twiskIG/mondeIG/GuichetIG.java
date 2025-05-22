@@ -12,7 +12,7 @@ public class GuichetIG extends EtapeIG{
     public GuichetIG(String nom, int larg, int haut){
         super(nom,larg,haut);
         this.estGuichet = true;
-        this.setNbJetons(1);
+        this.setnbJetons(1);
     }
     @Override
     public boolean estUnGuichet() {
@@ -21,9 +21,13 @@ public class GuichetIG extends EtapeIG{
     public int getNbJetons() {
         return nbJetons;
     }
-
-    public void setNbJetons(int nbJetons) {
+        @Override
+    public void setnbJetons(int nbJetons) {
         this.nbJetons = nbJetons;
+    }
+    @Override
+    public int getnbJetons() {
+        return this.nbJetons;
     }
 }
 

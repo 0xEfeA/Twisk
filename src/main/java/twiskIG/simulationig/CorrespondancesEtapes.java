@@ -13,7 +13,7 @@ public class CorrespondancesEtapes {
     public void ajouter(EtapeIG etapeig, Etape etape){
         correspondances.put(etapeig, etape);
     }
-    public Etape getEtape(EtapeIG etapeig){
+    public Etape get(EtapeIG etapeig){
         return correspondances.get(etapeig);
     }
 }

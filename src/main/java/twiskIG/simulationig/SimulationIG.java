@@ -1,5 +1,6 @@
 package twiskIG.simulationig;
 
+import twisk.monde.*;
 import twiskIG.exceptions.MondeException;
 import twiskIG.mondeIG.ArcIG;
 import twiskIG.mondeIG.EtapeIG;
@@ -18,6 +19,48 @@ public class SimulationIG {
      */
     public SimulationIG(MondeIG mondeIG) {
         this.mondeIG = mondeIG;
+    }
+
+    /**
+     * Construite monde dans modèle (Monde) depuis MondeIG
+     * @return
+     */
+    public Monde creerMonde() {
+        CorrespondancesEtapes corr = new CorrespondancesEtapes();
+        Monde monde = new Monde();
+        Etape etp;
+        //créer etape dans le modele depuis les étapes dans mondeIG
+        for (EtapeIG etape : mondeIG.getEtapes()) {
+            if(etape.estUnGuichet()){
+                 etp = new Guichet(etape.getNom(),etape.getnbJetons());
+            } else if (etape.estUneActiviteRestreinte()) {
+                etp = new ActiviteRestreinte(etape.getNom(),etape.getDelai(),etape.getEcart());
+
+            }else {
+                etp = new Activite(etape.getNom(),etape.getDelai(),etape.getEcart());
+            }
+            corr.ajouter(etape,etp);
+            monde.ajouter(etp);
+        }
+        //Ajoute les successeurs dans le modele
+        for (EtapeIG etapeig : mondeIG.getEtapes()) {
+            Etape etape = corr.get(etapeig);
+            for (EtapeIG succ : etapeig.getSuccesseurs()){
+                Etape succCorr = corr.get(succ);
+                etape.ajouterSuccesseur(succCorr);
+            }
+        }
+        //Ajoute entrée sortie dans modele
+        for(EtapeIG etapeig : mondeIG.getEtapes()){
+            Etape etape = corr.get(etapeig);
+            if(etapeig.estEntree()){
+                monde.aCommeEntree(etape);
+            }
+            if(etapeig.estSortie()){
+                monde.aCommeSortie(etape);
+            }
+        }
+        return monde;
     }
 
     /**

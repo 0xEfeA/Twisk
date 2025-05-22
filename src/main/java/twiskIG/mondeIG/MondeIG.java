@@ -429,7 +429,7 @@ public class MondeIG extends SujetObserve implements Iterable<EtapeIG> {
         }
         for (EtapeIG etapes : this.getEtapes()) {
             if (etapes.estUnGuichet() && etapes.identifiant.equals(etape.identifiant)) {
-                ((GuichetIG) etapes).setNbJetons(nombre);
+                ((GuichetIG) etapes).setnbJetons(nombre);
             }
         }
     }
