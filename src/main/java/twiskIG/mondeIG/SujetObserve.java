@@ -26,10 +26,15 @@ public class SujetObserve {
     /**
      * Fonction pour mettre a jour les observateurs
      */
-    public void notifierObservateurs(){
-        for(Observateur e: observateurs){
-            e.reagir();
+    private boolean enCours = false;
+
+    public void notifierObservateurs() {
+        if(enCours) return;
+        enCours = true;
+        for(Observateur o : observateurs) {
+            o.reagir();
         }
+        enCours = false;
     }
 }
 

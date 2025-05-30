@@ -10,15 +10,18 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import twiskIG.mondeIG.MondeIG;
+import twiskIG.simulationig.SimulationIG;
 
 public class VueOutils extends BorderPane implements Observateur {
     private MondeIG monde;
     private Button addActivity;
     private Button addGuichet;
     private Button simulate;
+    private SimulationIG simulation;
 
-    public VueOutils(MondeIG monde) {
+    public VueOutils(MondeIG monde, SimulationIG simulation) {
         this.monde = monde;
+        this.simulation = simulation;
         this.monde.ajouterObservateur(this);
         simulate = new Button();
         addActivity = new Button();
@@ -42,7 +45,8 @@ public class VueOutils extends BorderPane implements Observateur {
         Tooltip.install(simulate,new Tooltip("Lancer la simulation"));
         addActivity.setOnAction(new EcouteurBtnAddActivite(monde));
         addGuichet.setOnAction(new EcouteurBtnAddGuichet(monde));
-        simulate.setOnAction(new EcouteurSimuler(monde));
+        simulate.setOnAction(new EcouteurSimuler(monde, simulation));
+
 
         // Bottom bar with spacing
         HBox bottomBar = new HBox();

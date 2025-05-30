@@ -12,15 +12,14 @@ public class EcouteurSimuler implements EventHandler<ActionEvent> {
     private MondeIG monde;
     private SimulationIG simulation;
 
-    public EcouteurSimuler(MondeIG monde) {
+    public EcouteurSimuler(MondeIG monde, SimulationIG simulation) {
         this.monde = monde;
+        this.simulation = simulation;
     }
 
     @Override
     public void handle(ActionEvent actionEvent) {
         try {
-            Simulation sim = new Simulation(); // Create a Simulation instance
-            this.simulation = new SimulationIG(sim, monde);
             simulation.simuler();
         } catch (MondeException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -31,3 +30,4 @@ public class EcouteurSimuler implements EventHandler<ActionEvent> {
         }
     }
 }
+

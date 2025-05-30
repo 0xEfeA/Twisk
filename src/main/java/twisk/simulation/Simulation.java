@@ -11,6 +11,8 @@ public class Simulation extends SujetObserve {
     private KitC environnement;
     private int nbClients = 3 ; // Par défaut on a 3 clients
     private GestionnaireClients gestionnaireClients;
+    private HashMap<String, Integer> nbClientsParEtape = new HashMap<>();
+
     /**
      * Constructeur sans argument
      */
@@ -18,6 +20,7 @@ public class Simulation extends SujetObserve {
         this.environnement = new KitC();
         this.environnement.creerEnvironnement(); // Création du répertoire et copie des fichiers
     }
+
     public void simulerprint(Monde monde){
         System.out.println(monde.toC());
     }
@@ -66,66 +69,79 @@ public class Simulation extends SujetObserve {
         while (true) {
             // Récupération des informations des clients
             int[] tabclient = ou_sont_les_clients(nbEtapes, nbClients);
+            nbClientsParEtape.clear();
             notifierObservateurs();
             // taille de ségment mémoire d'une étape (nbClient + 1 case qui stock le nombre de client en mémoire)
             int tailleEtapesEnMemoire = nbClients+1;
+
             //Déplacement des client à travers les étapes
-            for (int i = 0; i < nbEtapes; i++) { //Parcours chaque étape
+            for (int i = 0; i < nbEtapes; i++) {
                 int nbclients = tabclient[i * tailleEtapesEnMemoire];
-                for (int j = 0; j < nbclients; j++) { //PArcours chaque client dans l'étape i
+                for (int j = 0; j < nbclients; j++) {
                     int pid = tabclient[j + 1 + i * tailleEtapesEnMemoire];
-                    if (i == 0) { //Cas 0 càd quand les clients arrivent en entrée
-                        gestionnaireClients.allerA(pid,monde.getEntree(),j);
-                    }else if(i==1){ // Cas où les clients arrivent en sortie
-                        gestionnaireClients.allerA(pid,monde.getSortie(),j);
-                    }else { // Cas autre ( activité ou guichet)
-                    gestionnaireClients.allerA(pid, monde.getEtapeI(i-2),j);
-                }
+
+                    // Move the client and update counts
+                    if (i == 0) {
+                        gestionnaireClients.allerA(pid, monde.getEntree(), j);
+                        nbClientsParEtape.put(
+                                monde.getEntree().getNom(),
+                                nbClientsParEtape.getOrDefault(monde.getEntree().getNom(), 0) + 1
+                        );
+                    } else if (i == 1) {
+                        gestionnaireClients.allerA(pid, monde.getSortie(), j);
+                        nbClientsParEtape.put(
+                                monde.getSortie().getNom(),
+                                nbClientsParEtape.getOrDefault(monde.getSortie().getNom(), 0) + 1
+                        );
+                    } else {
+                        String nomEtape = monde.getNomEtape(i - 2);
+                        gestionnaireClients.allerA(pid, monde.getEtapeI(i - 2), j);
+                        nbClientsParEtape.put(
+                                nomEtape,
+                                nbClientsParEtape.getOrDefault(nomEtape, 0) + 1
+                        );
+                    }
                 }
             }
 
-
-
-
-
-
             System.out.println();
 
+            for (int i = 0; i < nbEtapes-1; i++) {
+                // On récupère le nombre de client de l'étape i
+                int nbClientEtapeI = tabclient[i * tailleEtapesEnMemoire];
 
-                for (int i = 0; i < nbEtapes-1; i++) {
-                    // On récupère le nombre de client de l'étape i
-                    int nbClientEtapeI = tabclient[i * tailleEtapesEnMemoire];
+                // Etape 0 SasEntrée
+                if(i==0){
 
-                    // Etape 0 SasEntrée
-                    if(i==0){
+                    System.out.printf("étape %d (SasEntrée) %d clients : ", i, nbClientEtapeI);
 
-                        System.out.printf("étape %d (SasEntrée) %d clients : ", i, nbClientEtapeI);
+                }// Etape 1 SasSortie (Comme dans le cours)
+                else if(i==1){
+                    System.out.printf("étape %d (SasSortie) %d clients : ", i, nbClientEtapeI);
 
-                    }// Etape 1 SasSortie (Comme dans le cours)
-                    else if(i==1){
-                        System.out.printf("étape %d (SasSortie) %d clients : ", i, nbClientEtapeI);
+                }// Les autres étapes sont soit (Activite | ActiviteRestreinte | Guichet)
+                else{
+                    System.out.printf("étape %d (%s) %d clients : ", i, monde.getNomEtape(i-2), nbClientEtapeI);
 
-                    }// Les autres étapes sont soit (Activite | ActiviteRestreinte | Guichet)
-                    else{
-                        System.out.printf("étape %d (%s) %d clients : ", i, monde.getNomEtape(i-2), nbClientEtapeI);
+                }
+                //Affichage des identifiants des clients à l'étape i
+                for (int j = 0; j < nbClientEtapeI; j++) {
+                    int pidClientEtapeI = tabclient[i *tailleEtapesEnMemoire + j + 1];
+                    System.out.printf("%d,",pidClientEtapeI);
 
-                    }
-                    //Affichage des identifiants des clients à l'étape i
-                    for (int j = 0; j < nbClientEtapeI; j++) {
-                        int pidClientEtapeI = tabclient[i *tailleEtapesEnMemoire + j + 1];
-                        System.out.printf("%d,",pidClientEtapeI);
-
-
-                    }
-                    System.out.print("\n");
+                    //double rayonClient = 5.0;
+                    // Conversion des coordonnées pour un affichage horizontal (par exemple, clients espacés de 20 pixels)
+                    //double posXClient = (j * 20) + 10; // Décalage pour éviter que tous les cercles soient au même endroit
+                    //double posYClient = 10; // Ligne horizontale au début
+                    //System.out.printf(" (Coordonnées: x=%.1f, y=%.1f)", posXClient, posYClient);
                 }
                 System.out.print("\n");
+            }
+            System.out.print("\n");
             //Condition d'arrêt : quand tous les clients arrivent à la sortie ( Etape 1 )
             if ( tabclient[tailleEtapesEnMemoire]==nbClients) {
                 break;
             }
-
-
 
             try {
                 Thread.sleep(1000);
@@ -138,7 +154,6 @@ public class Simulation extends SujetObserve {
         nettoyage();
         System.out.println();
         System.out.println("Simulation terminée.\n");
-
 
     }
 
@@ -159,21 +174,10 @@ public class Simulation extends SujetObserve {
     public native int[] ou_sont_les_clients(int nbEtapes, int nbClients);
     public native void nettoyage();
 
-    /**
-     * Fonction pour avoir les clients par Etape
-     */
-    public HashMap<Etape, ArrayList<Client>> getClientsParEtape() {
-        HashMap<Etape, ArrayList<Client>> map = new HashMap<>();
-        if (gestionnaireClients == null) {
-            return map;
-        }
-        for (Client client : gestionnaireClients) {
-            Etape etape = client.getEtape();
-            map.computeIfAbsent(etape, k -> new ArrayList<>()).add(client);
-        }
-        return map;
+    public HashMap<String, Integer> getNbClientsParEtape() {
+        //System.out.println("getNbClientsParEtape() called.");
+        //System.out.println("nbClientsParEtape content: " + nbClientsParEtape);
+        return nbClientsParEtape;
     }
-
-
 
 }

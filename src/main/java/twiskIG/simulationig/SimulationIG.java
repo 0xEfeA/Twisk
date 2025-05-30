@@ -203,11 +203,7 @@ public class SimulationIG implements Observateur {
      */
     @Override
     public void reagir() {
-        try {
-            simuler();
-        } catch (MondeException e) {
-            System.out.println("Erreur lors de la simulation: " + e.getMessage());
-        }
+        mondeIG.notifierObservateurs();
     }
 
     public Simulation getSim() {

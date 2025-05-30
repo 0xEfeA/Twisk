@@ -175,34 +175,27 @@ public class VueMondeIG extends Pane implements Observateur {
             }
         }
 
-        Platform.runLater(() -> {
-            if (simulation == null) return;
+        // Affichage des clients
+        HashMap<String, Integer> etapeClients = simulation.getSim().getNbClientsParEtape();
 
-            HashMap<Etape, ArrayList<Client>> clientsParEtape = simulation.getSim().getClientsParEtape();
+        for (EtapeIG etape : monde.getEtapes()) {
+            int nbClients = etapeClients.getOrDefault(etape.getNom(), 0);
+            double x = etape.getX();
+            double y = etape.getY();
+            double spacing = 20.0;  // Espace horizontal entre les clients
+            for (int i = 0; i < nbClients; i++) {
+                double clientX = x + i * spacing;
+                double clientY = y;
+                Circle client = new Circle(clientX, clientY, 5.0);  // rayon 5
+                client.setFill(Color.GREEN);
+                this.getChildren().add(client);
 
-            for (EtapeIG etapeIG : monde.getEtapes()) {
-                if (etapeIG == null) {
-                    System.err.printf("No Etape found for EtapeIG %s%n", etapeIG.getNom());
-                    continue;
-                }
-
-                ArrayList<Client> clients = clientsParEtape.get(etapeIG);
-
-                if (clients == null || clients.isEmpty()) continue;
-
-                for (Client client : clients) {
-                    double x = etapeIG.getX() + 20 + client.getRang() * 20;
-                    double y = etapeIG.getY() + 20;
-
-                    Circle circle = new Circle(x, y, 5);
-                    circle.setFill(Color.BLUE);
-
-                    this.getChildren().add(circle);
-
-                    System.out.printf("Client %d at étape %s at (%.1f, %.1f)%n", client.getNumeroClient(), etapeIG.getNom(), x, y);
-                }
+                // Affichage des coordonnées sur la sortie standard pour déboguer
+                System.out.println("Client " + i + " à l'étape " + etape.getNom() +
+                        " : (" + clientX + ", " + clientY + ")");
             }
-        });
+
+        }
 
 
     }

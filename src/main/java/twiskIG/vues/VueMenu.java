@@ -55,6 +55,7 @@ public class VueMenu extends MenuBar implements Observateur {
          parametre.getItems().addAll(delai,ecart,nbjetons);
 
         this.getMenus().addAll(menuFichier, menuEdition,menuMonde,parametre);
+        this.reagir();
     }
 
     @Override
