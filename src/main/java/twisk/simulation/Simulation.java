@@ -5,6 +5,7 @@ import twisk.outils.KitC;
 import twiskIG.mondeIG.SujetObserve;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Simulation extends SujetObserve {
     private KitC environnement;
@@ -26,7 +27,7 @@ public class Simulation extends SujetObserve {
      * @param monde
      */
     public void simuler(Monde monde) {
-        //Instanciation du gestionnaire de clients
+        //Instanciation du gestionnaire de clientsgestionnaireClients
         gestionnaireClients = new GestionnaireClients();
         monde.getLesEtapes().reoganiser(monde.getEntree());
         String codeC = monde.toC();
@@ -148,9 +149,31 @@ public class Simulation extends SujetObserve {
     public void setNbClients(int nbClients) {
         this.nbClients = nbClients;
     }
+
+    public int getNbClients() {
+        return nbClients;
+    }
+
     //Fonctions natives
     public native int[] start_simulation(int nbEtapes, int nbGuichets, int nbClients, int[] tabJetonsGuichets);
     public native int[] ou_sont_les_clients(int nbEtapes, int nbClients);
     public native void nettoyage();
+
+    /**
+     * Fonction pour avoir les clients par Etape
+     */
+    public HashMap<Etape, ArrayList<Client>> getClientsParEtape() {
+        HashMap<Etape, ArrayList<Client>> map = new HashMap<>();
+        if (gestionnaireClients == null) {
+            return map;
+        }
+        for (Client client : gestionnaireClients) {
+            Etape etape = client.getEtape();
+            map.computeIfAbsent(etape, k -> new ArrayList<>()).add(client);
+        }
+        return map;
+    }
+
+
 
 }

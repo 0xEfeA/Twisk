@@ -13,68 +13,71 @@ import java.util.Set;
 
 public class SimulationIG implements Observateur {
 
-    private MondeIG mondeIG;
+    private final Simulation sim;
+    private final MondeIG mondeIG;
 
     /**
      * Constructeur
-     * @param mondeIG
+     * @param sim la simulation
+     * @param mondeIG le mondeIG
      */
-    public SimulationIG(MondeIG mondeIG) {
+    public SimulationIG(Simulation sim, MondeIG mondeIG) {
+        this.sim = sim;
         this.mondeIG = mondeIG;
         this.mondeIG.ajouterObservateur(this);
+        this.sim.ajouterObservateur(this);
     }
 
     /**
-     * Verifie le monde créé dans l'interface, créer le monde dans le modèle puis lance la simulation
+     * Vérifie le monde créé dans l'interface, crée le monde dans le modèle puis lance la simulation
      * @throws MondeException
      */
     public void simuler() throws MondeException {
-
         verifierMondeIG();
         Monde monde = creerMonde();
-        monde.getLesEtapes().reoganiser(monde.getEntree());
 
-        Simulation simu = new Simulation();
         System.out.println(mondeIG);
-        simu.simuler(monde);
+        sim.simuler(monde);
     }
 
     /**
-     * Construite monde dans modèle (Monde) depuis MondeIG
-     * @return
+     * Construit le monde dans le modèle (Monde) depuis MondeIG
+     * @return Monde
      */
     public Monde creerMonde() {
         CorrespondancesEtapes corr = new CorrespondancesEtapes();
         Monde monde = new Monde();
         Etape etp;
-        //créer etape dans le modele depuis les étapes dans mondeIG
-        for (EtapeIG etape : mondeIG.getEtapes()) {
-            if(etape.estUnGuichet()){
-                 etp = new Guichet(etape.getNom(),etape.getnbJetons());
-            } else if (etape.estUneActiviteRestreinte()) {
-                etp = new ActiviteRestreinte(etape.getNom(),etape.getDelai(),etape.getEcart());
 
-            }else {
-                etp = new Activite(etape.getNom(),etape.getDelai(),etape.getEcart());
+        // Créer les étapes dans le modèle depuis les étapes dans mondeIG
+        for (EtapeIG etape : mondeIG.getEtapes()) {
+            if (etape.estUnGuichet()) {
+                etp = new Guichet(etape.getNom(), etape.getnbJetons());
+            } else if (etape.estUneActiviteRestreinte()) {
+                etp = new ActiviteRestreinte(etape.getNom(), etape.getDelai(), etape.getEcart());
+            } else {
+                etp = new Activite(etape.getNom(), etape.getDelai(), etape.getEcart());
             }
-            corr.ajouter(etape,etp);
+            corr.ajouter(etape, etp);
             monde.ajouter(etp);
         }
-        //Ajoute les successeurs dans le modele
+
+        // Ajoute les successeurs dans le modèle
         for (EtapeIG etapeig : mondeIG.getEtapes()) {
             Etape etape = corr.get(etapeig);
-            for (EtapeIG succ : etapeig.getSuccesseurs()){
+            for (EtapeIG succ : etapeig.getSuccesseurs()) {
                 Etape succCorr = corr.get(succ);
                 etape.ajouterSuccesseur(succCorr);
             }
         }
-        //Ajoute entrée sortie dans modele
-        for(EtapeIG etapeig : mondeIG.getEtapes()){
+
+        // Ajoute entrée et sortie dans le modèle
+        for (EtapeIG etapeig : mondeIG.getEtapes()) {
             Etape etape = corr.get(etapeig);
-            if(etapeig.estEntree()){
+            if (etapeig.estEntree()) {
                 monde.aCommeEntree(etape);
             }
-            if(etapeig.estSortie()){
+            if (etapeig.estSortie()) {
                 monde.aCommeSortie(etape);
             }
         }
@@ -86,123 +89,128 @@ public class SimulationIG implements Observateur {
      * @throws MondeException
      */
     public void verifierMondeIG() throws MondeException {
-        setActiviteRestreinte(); // Passe les activités après un guichet en restreinte
-        if(!verifierEntreeSortie()){
-            throw new MondeException("Une activité n'est pas reliée à une entrée ou sortie");
+        setActiviteRestreinte();
+        if (!verifierEntreeSortie()) {
+            throw new MondeException("Une activité n'est pas reliée à une entrée ou une sortie");
         }
-
-        if(!verifierGrapheConnecte()){
+        if (!verifierGrapheConnecte()) {
             throw new MondeException("Une activité n'est pas reliée correctement dans le monde");
         }
-        if(mondeIG.getEtapes().isEmpty()){
+        if (mondeIG.getEtapes().isEmpty()) {
             throw new MondeException("Le monde est vide");
         }
     }
 
-            /**
-             * Si une activité est précédé d'un guichet elle devient restreinte
-             */
-            public void setActiviteRestreinte(){
-
-                for (EtapeIG etape : mondeIG.getEtapes()) {
-                    for(EtapeIG pred : etape.getPredecesseurs()){
-                        if(pred.estUnGuichet() && etape.estUneActivite()){
-                            etape.setEstActiviteRestreinte(true);
-                        }
-                    }
+    /**
+     * Si une activité est précédée d'un guichet, elle devient restreinte
+     */
+    public void setActiviteRestreinte() {
+        for (EtapeIG etape : mondeIG.getEtapes()) {
+            for (EtapeIG pred : etape.getPredecesseurs()) {
+                if (pred.estUnGuichet() && etape.estUneActivite()) {
+                    etape.setEstActiviteRestreinte(true);
                 }
             }
-
-
-
+        }
+    }
 
     /**
-     * Parcours toutes les étapes et guichet et vérifie qu'ils sont reliées à une entrée et une sortie minimum
-     * @return
+     * Vérifie que toutes les étapes sont reliées à une entrée et une sortie
+     * @return boolean
      */
-    public boolean verifierEntreeSortie(){
-
-
-        for(EtapeIG etape : mondeIG.getEtapes()){
-            if(!etape.estEntree() && !etape.estSortie()){
-                if(!aUneSortie(etape,new HashSet<>())){ //vérifie chemin vers sortie
+    public boolean verifierEntreeSortie() {
+        for (EtapeIG etape : mondeIG.getEtapes()) {
+            if (!etape.estEntree() && !etape.estSortie()) {
+                if (!aUneSortie(etape, new HashSet<>())) {
                     return false;
                 }
-                if(!aUneEntree(etape,new HashSet<>())){//vérifie chemin vers entrée
+                if (!aUneEntree(etape, new HashSet<>())) {
                     return false;
                 }
             }
         }
-
         return true;
     }
 
     /**
-     * Vérifie que le monde (graphe) n'a pas d'activité ou guichet qui traine reliée à rien
-     * @return
+     * Vérifie que le graphe est connecté
+     * @return boolean
      */
-    public boolean verifierGrapheConnecte(){
-        for(EtapeIG etape : mondeIG.getEtapes()){
-            if(!etape.estEntree() && etape.getPredecesseurs().isEmpty()){ // Cas où c'est pas une entrée et n'a pas de pred
+    public boolean verifierGrapheConnecte() {
+        for (EtapeIG etape : mondeIG.getEtapes()) {
+            if (!etape.estEntree() && etape.getPredecesseurs().isEmpty()) {
                 return false;
-            }if(!etape.estSortie() && etape.getSuccesseurs().isEmpty()){ // Cas où c'est pas une sortie et n'a pas de succ
+            }
+            if (!etape.estSortie() && etape.getSuccesseurs().isEmpty()) {
                 return false;
             }
         }
         return true;
     }
+
     /**
-     * Parcours récursivement tous les prédécesseurs pour trouver une entrée (DFS cf : cours d'algo)
-     * @param etape
-     * @param parcourus
-     * @return true si etape lié à une entrée false sinon
+     * DFS pour vérifier la liaison à une entrée
      */
-    public boolean aUneEntree(EtapeIG etape, Set<EtapeIG> parcourus){
-        if(etape.estEntree()){
+    public boolean aUneEntree(EtapeIG etape, Set<EtapeIG> parcourus) {
+        if (etape.estEntree()) {
             return true;
         }
         parcourus.add(etape);
-        for (EtapeIG pred : etape.getPredecesseurs()){
-            if(!parcourus.contains(pred) && aUneEntree(pred, parcourus)){
+        for (EtapeIG pred : etape.getPredecesseurs()) {
+            if (!parcourus.contains(pred) && aUneEntree(pred, parcourus)) {
                 return true;
             }
         }
         return false;
     }
-    public boolean aUneSortie(EtapeIG etape, Set<EtapeIG> parcourus){
-        if(etape.estSortie()){
+
+    /**
+     * DFS pour vérifier la liaison à une sortie
+     */
+    public boolean aUneSortie(EtapeIG etape, Set<EtapeIG> parcourus) {
+        if (etape.estSortie()) {
             return true;
         }
         parcourus.add(etape);
-        for (EtapeIG succ : etape.getSuccesseurs()){
-            if(!parcourus.contains(succ) && aUneSortie(succ, parcourus)){
+        for (EtapeIG succ : etape.getSuccesseurs()) {
+            if (!parcourus.contains(succ) && aUneSortie(succ, parcourus)) {
                 return true;
             }
         }
         return false;
     }
+
     /**
-     * Parcours tous les arcs et ajoute les prédécesseurs
+     * Ajoute les prédécesseurs aux étapes
      */
-    public void setPredecesseur(){
-        for(ArcIG arcig : mondeIG.getArcs()){
-            // Soit un ArcIG, son point de départ appartient forcément  au prédécesseur de l'étape du point d'arrvié
+    public void setPredecesseur() {
+        for (ArcIG arcig : mondeIG.getArcs()) {
             arcig.getArrivee().getEtape().setPredecesseurs(arcig.getDepart().getEtape());
         }
     }
 
     /**
-     * Parcours les arcs et ajoutes les successeurs
+     * Ajoute les successeurs aux étapes
      */
-    public void setSuccesseur(){
-        for(ArcIG arcig : mondeIG.getArcs()){
+    public void setSuccesseur() {
+        for (ArcIG arcig : mondeIG.getArcs()) {
             arcig.getDepart().getEtape().setSuccesseurs(arcig.getArrivee().getEtape());
         }
     }
 
-
+    /**
+     * Réagit aux changements dans le modèle
+     */
     @Override
     public void reagir() {
+        try {
+            simuler();
+        } catch (MondeException e) {
+            System.out.println("Erreur lors de la simulation: " + e.getMessage());
+        }
+    }
 
+    public Simulation getSim() {
+        return sim;
     }
 }

@@ -1,5 +1,6 @@
 package twiskIG.vues;
 
+import javafx.application.Platform;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -8,19 +9,26 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import twisk.monde.Etape;
+import twisk.simulation.Client;
 import twiskIG.mondeIG.*;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
+import twiskIG.simulationig.SimulationIG;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class VueMondeIG extends Pane implements Observateur {
     private MondeIG monde;
+    private SimulationIG simulation;
 
-    public VueMondeIG(MondeIG monde) {
+    public VueMondeIG(MondeIG monde, SimulationIG simulation) {
         this.monde = monde;
+        this.simulation = simulation;
         this.monde.ajouterObservateur(this);
 
 
@@ -166,6 +174,36 @@ public class VueMondeIG extends Pane implements Observateur {
                 this.getChildren().add(new VuePointDeControleIG(pdc, monde));
             }
         }
+
+        Platform.runLater(() -> {
+            if (simulation == null) return;
+
+            HashMap<Etape, ArrayList<Client>> clientsParEtape = simulation.getSim().getClientsParEtape();
+
+            for (EtapeIG etapeIG : monde.getEtapes()) {
+                if (etapeIG == null) {
+                    System.err.printf("No Etape found for EtapeIG %s%n", etapeIG.getNom());
+                    continue;
+                }
+
+                ArrayList<Client> clients = clientsParEtape.get(etapeIG);
+
+                if (clients == null || clients.isEmpty()) continue;
+
+                for (Client client : clients) {
+                    double x = etapeIG.getX() + 20 + client.getRang() * 20;
+                    double y = etapeIG.getY() + 20;
+
+                    Circle circle = new Circle(x, y, 5);
+                    circle.setFill(Color.BLUE);
+
+                    this.getChildren().add(circle);
+
+                    System.out.printf("Client %d at étape %s at (%.1f, %.1f)%n", client.getNumeroClient(), etapeIG.getNom(), x, y);
+                }
+            }
+        });
+
 
     }
 
