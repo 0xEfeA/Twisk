@@ -6,11 +6,12 @@ import twiskIG.exceptions.MondeException;
 import twiskIG.mondeIG.ArcIG;
 import twiskIG.mondeIG.EtapeIG;
 import twiskIG.mondeIG.MondeIG;
+import twiskIG.vues.Observateur;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class SimulationIG {
+public class SimulationIG implements Observateur {
 
     private MondeIG mondeIG;
 
@@ -20,6 +21,7 @@ public class SimulationIG {
      */
     public SimulationIG(MondeIG mondeIG) {
         this.mondeIG = mondeIG;
+        this.mondeIG.ajouterObservateur(this);
     }
 
     /**
@@ -199,4 +201,8 @@ public class SimulationIG {
     }
 
 
+    @Override
+    public void reagir() {
+
+    }
 }

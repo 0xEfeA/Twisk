@@ -2,10 +2,11 @@ package twisk.simulation;
 
 import twisk.monde.*;
 import twisk.outils.KitC;
+import twiskIG.mondeIG.SujetObserve;
 
 import java.util.ArrayList;
 
-public class Simulation {
+public class Simulation extends SujetObserve {
     private KitC environnement;
     private int nbClients = 3 ; // Par défaut on a 3 clients
     private GestionnaireClients gestionnaireClients;
@@ -64,6 +65,7 @@ public class Simulation {
         while (true) {
             // Récupération des informations des clients
             int[] tabclient = ou_sont_les_clients(nbEtapes, nbClients);
+            notifierObservateurs();
             // taille de ségment mémoire d'une étape (nbClient + 1 case qui stock le nombre de client en mémoire)
             int tailleEtapesEnMemoire = nbClients+1;
             //Déplacement des client à travers les étapes

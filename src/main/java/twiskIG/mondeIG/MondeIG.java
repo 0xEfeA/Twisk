@@ -204,8 +204,6 @@ public class MondeIG extends SujetObserve implements Iterable<EtapeIG> {
 
 
 
-
-
     public void renommerSelection() {
         if (getEtapesSelectionnees().size() == 1) {
             EtapeIG etape = getEtapesSelectionnees().get(0);

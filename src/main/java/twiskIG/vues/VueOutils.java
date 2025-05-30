@@ -49,10 +49,6 @@ public class VueOutils extends BorderPane implements Observateur {
         bottomBar.setPadding(new Insets(10));
         bottomBar.setSpacing(10);
 
-        // Spacer to push buttons to corners
-        Region spacer = new Region();
-        HBox.setHgrow(spacer, Priority.ALWAYS);
-
         bottomBar.getChildren().addAll(addActivity, simulate, addGuichet);
         this.setBottom(bottomBar);
     }
@@ -66,6 +62,7 @@ public class VueOutils extends BorderPane implements Observateur {
     @Override
     public void reagir() {
         addActivity.setDisable(monde.numEtapes() >= 10);
+        addGuichet.setDisable(monde.numEtapes() >= 10);
     }
 }
 
