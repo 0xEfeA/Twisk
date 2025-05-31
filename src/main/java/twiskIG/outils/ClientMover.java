@@ -17,8 +17,9 @@ public class ClientMover {
         this.maxY = maxY;
 
         Random rand = new Random();
-        this.dx = 1 + rand.nextDouble() * 2; // speed x between 1 and 3 px/frame
-        this.dy = 1 + rand.nextDouble() * 2; // speed y between 1 and 3 px/frame
+        this.dx = (1 + rand.nextDouble() * 2) * 0.5; // 0.5 to 1.5 px/frame
+        this.dy = (1 + rand.nextDouble() * 2) * 0.5; // 0.5 to 1.5 px/frame
+
 
         // Randomize direction
         if (rand.nextBoolean()) dx = -dx;
