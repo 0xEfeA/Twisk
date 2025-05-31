@@ -33,8 +33,8 @@ public class VueOutils extends BorderPane implements Observateur {
         Image add_gui = new Image(getClass().getResourceAsStream("/images/add_guichet.png"), 40, 40, true, true);
         addGuichet.setGraphic(new ImageView(add_gui));
 
-        Image simu = new Image(getClass().getResourceAsStream("/images/simuler.png"), 40, 40, true, true);
-        simulate.setGraphic(new ImageView(simu));
+
+
         // Set fixed size for both buttons
         setButtonSize(addActivity);
         setButtonSize(addGuichet);
@@ -42,10 +42,8 @@ public class VueOutils extends BorderPane implements Observateur {
         // Tooltips
         Tooltip.install(addActivity, new Tooltip("Ajouter une nouvelle activité"));
         Tooltip.install(addGuichet, new Tooltip("Ajouter un nouveau guichet"));
-        Tooltip.install(simulate,new Tooltip("Lancer la simulation"));
         addActivity.setOnAction(new EcouteurBtnAddActivite(monde));
         addGuichet.setOnAction(new EcouteurBtnAddGuichet(monde));
-        simulate.setOnAction(new EcouteurSimuler(monde, simulation));
 
 
         // Bottom bar with spacing
@@ -55,6 +53,9 @@ public class VueOutils extends BorderPane implements Observateur {
 
         bottomBar.getChildren().addAll(addActivity, simulate, addGuichet);
         this.setBottom(bottomBar);
+
+        updateSimulationButton();
+        monde.notifierObservateurs();
     }
 
     private void setButtonSize(Button button) {
@@ -67,7 +68,26 @@ public class VueOutils extends BorderPane implements Observateur {
     public void reagir() {
         addActivity.setDisable(monde.numEtapes() >= 10);
         addGuichet.setDisable(monde.numEtapes() >= 10);
+        updateSimulationButton();
     }
+
+    private void updateSimulationButton() {
+        Image simu = new Image(getClass().getResourceAsStream("/images/simuler.png"), 40, 40, true, true);
+        Image simu2 = new Image(getClass().getResourceAsStream("/images/simulerStop.png"), 40, 40, true, true);
+
+        simulate.setOnAction(null); // Remove any existing handler
+
+        if (this.simulation.isEncoursSimulation()) {
+            simulate.setGraphic(new ImageView(simu2));
+            simulate.setOnAction(new EcouteurArretSimulation(monde, simulation));
+            Tooltip.install(simulate, new Tooltip("Arrêter la simulation"));
+        } else {
+            simulate.setGraphic(new ImageView(simu));
+            simulate.setOnAction(new EcouteurSimuler(monde, simulation));
+            Tooltip.install(simulate, new Tooltip("Lancer la simulation"));
+        }
+    }
+
 }
 
 

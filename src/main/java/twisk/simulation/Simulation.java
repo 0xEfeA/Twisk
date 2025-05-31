@@ -1,13 +1,13 @@
 package twisk.simulation;
 
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import twisk.monde.*;
 import twisk.outils.KitC;
 import twisk.outils.ThreadsManager;
-import twiskIG.exceptions.TaskException;
-import twiskIG.exceptions.TwiskException;
 import twiskIG.mondeIG.SujetObserve;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -16,6 +16,7 @@ public class Simulation extends SujetObserve {
     private int nbClients = 10 ; // Par défaut on a 3 clients
     private GestionnaireClients gestionnaireClients;
     private HashMap<String, Integer> nbClientsParEtape = new HashMap<>();
+    private int[] tabsimu;
 
     /**
      * Constructeur sans argument
@@ -61,7 +62,7 @@ public class Simulation extends SujetObserve {
                     indiceGuichet++;
                 }
                 // Récupération de l'adresse du tableau contenant les pid des processus retourné par start_simulation
-                int[] tabsimu = start_simulation(nbEtapes, nbGuichets, nbClients, tabJetonsGuichet);
+                tabsimu = start_simulation(nbEtapes, nbGuichets, nbClients, tabJetonsGuichet);
                 //Initialisation du gestionnaire avec les PID des clients
                 gestionnaireClients.setClient(tabsimu);
                 // Affichage pid avant simulation
@@ -76,7 +77,7 @@ public class Simulation extends SujetObserve {
                 while (true) {
                     // Récupération des informations des clients
                     int[] tabclient = ou_sont_les_clients(nbEtapes, nbClients);
-                    notifierObservateurs();
+                    Platform.runLater(() -> notifierObservateurs());
                     // taille de ségment mémoire d'une étape (nbClient + 1 case qui stock le nombre de client en mémoire)
                     int tailleEtapesEnMemoire = nbClients+1;
                     nbClientsParEtape.clear();
@@ -102,7 +103,7 @@ public class Simulation extends SujetObserve {
                             } else {
                                 String nomEtape = monde.getNomEtape(i - 2);
                                 ou_sont_les_clients(nbEtapes,nbClients);
-                                notifierObservateurs();
+                                Platform.runLater(() -> notifierObservateurs());
                                 gestionnaireClients.allerA(pid, monde.getEtapeI(i - 2), j);
                                 nbClientsParEtape.put(
                                         nomEtape,
@@ -155,7 +156,7 @@ public class Simulation extends SujetObserve {
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
-                        e.printStackTrace();
+                        break;
                     }
                     System.out.println("---------------------------------------------------------------");
                 }
@@ -194,4 +195,34 @@ public class Simulation extends SujetObserve {
         return nbClientsParEtape;
     }
 
+    public KitC getEnvironnement() {
+        return environnement;
+    }
+
+    public void killProcesses(int[] pids) {
+        for (int pid : pids) {
+            if (isProcessAlive(pid)) {
+                try {
+                    new ProcessBuilder("kill", "-9", String.valueOf(pid)).start().waitFor();
+                    Platform.runLater(() -> notifierObservateurs());
+                } catch (IOException | InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private boolean isProcessAlive(int pid) {
+        try {
+            Process check = new ProcessBuilder("kill", "-0", String.valueOf(pid)).start();
+            int exitCode = check.waitFor();
+            return exitCode == 0;
+        } catch (IOException | InterruptedException e) {
+            return false;
+        }
+    }
+
+    public int[] getTabsimu() {
+        return tabsimu;
+    }
 }

@@ -53,4 +53,12 @@ public class ThreadsManager {
         }
         threads.clear();
     }
+
+    public Thread getLastThread() {
+        if (threads.isEmpty()) return null;
+        return threads.get(threads.size() - 1);
+    }
+
+
+
 }

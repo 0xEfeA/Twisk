@@ -5,7 +5,6 @@ import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import twisk.simulation.Simulation;
-import twiskIG.exceptions.MondeException;
 import twiskIG.mondeIG.MondeIG;
 import twiskIG.simulationig.SimulationIG;
 import twiskIG.vues.VueMenu;

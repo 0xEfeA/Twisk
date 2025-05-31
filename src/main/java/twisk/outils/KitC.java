@@ -3,13 +3,16 @@ package twisk.outils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 public class KitC {
     /**
      * Function qui creer le répertoire twisk sous /tmp/
      * puis y recopie les deux fichiers programmeC.o et def.h.
      */
-    public void creerEnvironnement(){
+    public void creerEnvironnement() {
         Path directory = Paths.get("/tmp/twisk");
         try {
             // création du répertoire twisk sous /tmp.
@@ -63,11 +66,13 @@ public class KitC {
      * Construction de la bobliothèque libTwisk.so
      */
     public void construireLaBibliotheque() {
-        ProcessBuilder pb = new ProcessBuilder("gcc", "-shared", "/tmp/twisk/programmeC.o","/tmp/twisk/codeNatif.o", "/tmp/twisk/client.o","/tmp/twisk/lois.o",  "-o", "/tmp/twisk/libTwisk.so","-lm");
+        ProcessBuilder pb = new ProcessBuilder("gcc", "-shared", "/tmp/twisk/programmeC.o", "/tmp/twisk/codeNatif.o", "/tmp/twisk/client.o", "/tmp/twisk/lois.o", "-o", "/tmp/twisk/libTwisk.so", "-lm");
         try {
             pb.inheritIO().start().waitFor();
         } catch (InterruptedException | IOException e) {
             e.printStackTrace();
         }
     }
+
+
 }

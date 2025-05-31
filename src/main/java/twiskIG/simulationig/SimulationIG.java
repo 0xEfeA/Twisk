@@ -1,6 +1,7 @@
 package twiskIG.simulationig;
 
 import twisk.monde.*;
+import twisk.outils.ThreadsManager;
 import twisk.simulation.Simulation;
 import twiskIG.exceptions.MondeException;
 import twiskIG.mondeIG.ArcIG;
@@ -15,6 +16,7 @@ public class SimulationIG implements Observateur {
 
     private final Simulation sim;
     private final MondeIG mondeIG;
+    private boolean encoursSimulation= false;
     /**
      * Constructeur
      * @param sim la simulation
@@ -36,7 +38,8 @@ public class SimulationIG implements Observateur {
         Monde monde = creerMonde();
         System.out.println(mondeIG.toString());
         sim.simuler(monde);
-
+        encoursSimulation = true;
+        mondeIG.notifierObservateurs();
     }
 
     /**
@@ -209,4 +212,21 @@ public class SimulationIG implements Observateur {
     public Simulation getSim() {
         return sim;
     }
+
+    public boolean isEncoursSimulation() {
+        return encoursSimulation;
+    }
+
+    public void setEncoursSimulation(boolean encoursSimulation) {
+        this.encoursSimulation = encoursSimulation;
+        sim.notifierObservateurs();
+    }
+
+    public void reinitialiserSimulation() {
+        ThreadsManager.getInstance().detruireTout();
+        sim.killProcesses(sim.getTabsimu());
+        setEncoursSimulation(false);
+        reagir();
+    }
+
 }
