@@ -37,7 +37,7 @@ public class MondeIG extends SujetObserve implements Iterable<EtapeIG> {
      */
     public void ajouter(String type) {
         if (type.equals("Activité")) {
-            ActiviteIG activite = new ActiviteIG("Activité " + (this.numEtapes() +1), 150, 65);
+            ActiviteIG activite = new ActiviteIG("Activité " + (this.numEtapes() + 1), 150, 65);
             etapes.put(activite.getIdentifiant(), activite);
             System.out.println("Activité ajoutée  " ); //+ activite.getIdentifiant()
             notifierObservateurs();
