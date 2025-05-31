@@ -171,6 +171,7 @@ public class Monde implements Iterable<Etape> {
         }
         sb.append("\n");
         sb.append("void simulation(int ids){\n").append(entree.toC()).append("\n");
+        this.lesEtapes.reoganiser(entree);
         for(Etape etape : lesEtapes){
             if(etape.estUnGuichet()){
                 Guichet guichet = (Guichet) etape;

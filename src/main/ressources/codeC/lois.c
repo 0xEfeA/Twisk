@@ -12,7 +12,7 @@ void delaiUniforme(int temps, int ecart) {
     int n  = bs - bi + 1;
     int nbSec = (rand() / (double)RAND_MAX) * n;
     nbSec += bi;
-    usleep(nbSec * 1000000);
+    sleep(nbSec );
 }
 
 void delaiGauss(double moyenne, double ecartType) {
@@ -25,7 +25,7 @@ srand(time(NULL));
         X = 1;
     }
     int nbSec = (int)(X + 0.5);
-    usleep(nbSec * 1000000);
+    sleep(nbSec );
 }
 
 void delaiExponentiel(double lambda) {
@@ -36,5 +36,5 @@ srand(time(NULL));
         X = 1;
     }
     int nbSec = (int)(X + 0.5);
-    usleep(nbSec * 1000000);
+    sleep(nbSec );
 }

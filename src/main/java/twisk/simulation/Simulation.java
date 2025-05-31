@@ -39,7 +39,6 @@ public class Simulation extends SujetObserve {
             protected Void call() throws Exception {
                 //Instanciation du gestionnaire de clientsgestionnaireClients
                 gestionnaireClients = new GestionnaireClients();
-                monde.getLesEtapes().reoganiser(monde.getEntree());
                 String codeC = monde.toC();
                 environnement.creerFichier(codeC);
                 environnement.compiler();
