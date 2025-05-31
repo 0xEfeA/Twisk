@@ -152,6 +152,7 @@ public class Simulation extends SujetObserve {
         }
         gestionnaireClients.nettoyer();
         nettoyage();
+        notifierObservateurs();
         System.out.println();
         System.out.println("Simulation terminée.\n");
 
