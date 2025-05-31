@@ -191,8 +191,7 @@ public class VueMondeIG extends Pane implements Observateur {
                 this.getChildren().add(client);
 
                 // Affichage des coordonnées sur la sortie standard pour déboguer
-                System.out.println("Client " + i + " à l'étape " + etape.getNom() +
-                        " : (" + clientX + ", " + clientY + ")");
+                //System.out.println("Client " + i + " à l'étape " + etape.getNom() + " : (" + clientX + ", " + clientY + ")");
             }
 
         }

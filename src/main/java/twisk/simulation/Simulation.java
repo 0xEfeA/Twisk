@@ -9,7 +9,7 @@ import java.util.HashMap;
 
 public class Simulation extends SujetObserve {
     private KitC environnement;
-    private int nbClients = 3 ; // Par défaut on a 3 clients
+    private int nbClients = 4 ; // Par défaut on a 3 clients
     private GestionnaireClients gestionnaireClients;
     private HashMap<String, Integer> nbClientsParEtape = new HashMap<>();
 
@@ -69,11 +69,10 @@ public class Simulation extends SujetObserve {
         while (true) {
             // Récupération des informations des clients
             int[] tabclient = ou_sont_les_clients(nbEtapes, nbClients);
-            nbClientsParEtape.clear();
             notifierObservateurs();
             // taille de ségment mémoire d'une étape (nbClient + 1 case qui stock le nombre de client en mémoire)
             int tailleEtapesEnMemoire = nbClients+1;
-
+            nbClientsParEtape.clear();
             //Déplacement des client à travers les étapes
             for (int i = 0; i < nbEtapes; i++) {
                 int nbclients = tabclient[i * tailleEtapesEnMemoire];
@@ -129,11 +128,12 @@ public class Simulation extends SujetObserve {
                     int pidClientEtapeI = tabclient[i *tailleEtapesEnMemoire + j + 1];
                     System.out.printf("%d,",pidClientEtapeI);
 
-                    //double rayonClient = 5.0;
+                    double rayonClient = 5.0;
                     // Conversion des coordonnées pour un affichage horizontal (par exemple, clients espacés de 20 pixels)
-                    //double posXClient = (j * 20) + 10; // Décalage pour éviter que tous les cercles soient au même endroit
-                    //double posYClient = 10; // Ligne horizontale au début
-                    //System.out.printf(" (Coordonnées: x=%.1f, y=%.1f)", posXClient, posYClient);
+                    double posXClient = (j * 20) + 10; // Décalage pour éviter que tous les cercles soient au même endroit
+                    double posYClient = 10; // Ligne horizontale au début
+
+                    System.out.printf(" (Coordonnées: x=%.1f, y=%.1f)", posXClient, posYClient);
                 }
                 System.out.print("\n");
             }
@@ -175,8 +175,8 @@ public class Simulation extends SujetObserve {
     public native void nettoyage();
 
     public HashMap<String, Integer> getNbClientsParEtape() {
-        //System.out.println("getNbClientsParEtape() called.");
-        //System.out.println("nbClientsParEtape content: " + nbClientsParEtape);
+        System.out.println("getNbClientsParEtape() called.");
+        System.out.println("nbClientsParEtape content: " + nbClientsParEtape);
         return nbClientsParEtape;
     }
 
