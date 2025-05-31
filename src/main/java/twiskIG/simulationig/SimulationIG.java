@@ -38,6 +38,7 @@ public class SimulationIG implements Observateur {
 
         System.out.println(mondeIG);
         sim.simuler(monde);
+
     }
 
     /**

@@ -1,5 +1,6 @@
 package twiskIG.vues;
 
+import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
@@ -11,26 +12,36 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
-import twisk.monde.Etape;
-import twisk.simulation.Client;
 import twiskIG.mondeIG.*;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
+import twiskIG.outils.ClientMover;
 import twiskIG.simulationig.SimulationIG;
 
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 public class VueMondeIG extends Pane implements Observateur {
     private MondeIG monde;
     private SimulationIG simulation;
+    private final ArrayList<ClientMover> clientMovers = new ArrayList<>();
 
     public VueMondeIG(MondeIG monde, SimulationIG simulation) {
         this.monde = monde;
         this.simulation = simulation;
         this.monde.ajouterObservateur(this);
 
+        AnimationTimer animationTimer = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                for (ClientMover mover : clientMovers) {
+                    mover.update();
+                }
+            }
+        };
+        animationTimer.start();
 
         // Accepter le drag (drag over)
         this.setOnDragOver(event -> {
@@ -68,138 +79,172 @@ public class VueMondeIG extends Pane implements Observateur {
 
     @Override
     public void reagir() {
-        this.getChildren().clear();
+        Runnable command = new Runnable() {
+            @Override
+            public void run() {
+                VueMondeIG.this.getChildren().clear();
 
-        // Afficher les arcs
-        for (ArcIG arc : monde.getArcs()) {
-            VueArcIG new_arc = new VueArcIG(arc);
-            new_arc.setOnMouseClicked((MouseEvent event) -> monde.gererClicArc(arc));
+                // Afficher les arcs
+                for (ArcIG arc : monde.getArcs()) {
+                    VueArcIG new_arc = new VueArcIG(arc);
+                    new_arc.setOnMouseClicked((MouseEvent event) -> monde.gererClicArc(arc));
 
-            if (monde.getArcsSelectionnes().contains(arc)) {
-                new_arc.setColor(Color.RED);
-                new_arc.setArrowColor(Color.RED);
-            } else {
-                new_arc.setColor(Color.BLACK);
-                new_arc.setArrowColor(Color.BLACK);
+                    if (monde.getArcsSelectionnes().contains(arc)) {
+                        new_arc.setColor(Color.RED);
+                        new_arc.setArrowColor(Color.RED);
+                    } else {
+                        new_arc.setColor(Color.BLACK);
+                        new_arc.setArrowColor(Color.BLACK);
+                    }
+                    VueMondeIG.this.getChildren().add(new_arc);
+                }
+
+                // Dessiner chaque activité
+                for (EtapeIG etape : monde.getEtapes()) {
+
+                    // Detect if this is a guichet or an activité
+                    VueEtapeIG vueEtape;
+                    HBox center;
+
+                    if (etape.estUnGuichet()) {
+                        vueEtape = new VueGuichetIG(monde, etape);
+                    } else {
+                        vueEtape = new VueActiviteIG(monde, etape);
+                    }
+
+                    center = vueEtape.getCenter();
+
+                    double hBoxWidth = center.getPrefWidth();
+                    double hBoxHeight = center.getPrefHeight();
+
+                    // Calculate dimensions
+                    double newWidth = etape.getLargeur();
+                    double newHeight = etape.getHauteur();
+
+                    if (hBoxWidth > 130) {
+                        newWidth += (hBoxWidth - 130) + 2;
+                    }
+                    if (hBoxHeight > 35) {
+                        newHeight += (hBoxHeight - 35) + 5;
+                    }
+
+                    // Create rectangle
+                    Rectangle rect = new Rectangle(etape.getX(), etape.getY(), newWidth, newHeight);
+
+                    // Icons
+                    Image enter = new Image(getClass().getResourceAsStream("/images/enter.png"), 15, 15, true, true);
+                    ImageView enterIcon = new ImageView(enter);
+
+                    Image sort = new Image(getClass().getResourceAsStream("/images/exit.png"), 15, 15, true, true);
+                    ImageView sortieIcon = new ImageView(sort);
+
+                    StackPane iconBox = new StackPane();
+                    iconBox.setPrefSize(15, 15);
+                    iconBox.setStyle("-fx-background-color: white;");
+                    if (etape.estEntree() && (etape.estUneActivite() || etape.estUnGuichet())) {
+                        iconBox.getChildren().add(enterIcon);
+                    } else if (etape.estSortie() && etape.estUneActivite()) {
+                        iconBox.getChildren().add(sortieIcon);
+                    }
+
+                    iconBox.setLayoutX(etape.getX() + newWidth - 20);
+                    iconBox.setLayoutY(etape.getY() + 2);
+
+                    DropShadow shadow = new DropShadow();
+                    shadow.setColor(javafx.scene.paint.Color.LIGHTBLUE);
+                    shadow.setRadius(10);
+                    shadow.setOffsetX(0);
+                    shadow.setOffsetY(0);
+
+                    rect.setEffect(shadow);
+                    iconBox.setEffect(shadow);
+
+                    if (monde.getEtapesSelectionnees().contains(etape)) {
+                        rect.setStyle("-fx-fill: white; -fx-stroke: red; -fx-stroke-width: 3;");
+                    } else {
+                        rect.setStyle("-fx-fill: white; -fx-stroke: lightblue; -fx-stroke-width: 2;");
+                    }
+
+                    rect.setArcWidth(10);
+                    rect.setArcHeight(10);
+                    rect.setOnMouseClicked((MouseEvent event) -> monde.gererClicEtape(etape));
+                    VueMondeIG.this.getChildren().addAll(rect, iconBox);
+
+                    // Centering the VueEtapeIG
+                    double centerX = etape.getX() + (newWidth - hBoxWidth) / 2;
+                    double centerY = etape.getY() + (newHeight - hBoxHeight) / 3;
+                    vueEtape.relocate(centerX, centerY);
+                    VueMondeIG.this.getChildren().add(vueEtape);
+
+                    // Points de contrôle
+                    ArrayList<PointDeControleIG> newpoints = new ArrayList<>();
+                    newpoints.add(new PointDeControleIG((int) (etape.getX() + newWidth / 2), etape.getY(), etape)); // up
+                    newpoints.add(new PointDeControleIG((int) (etape.getX() + newWidth / 2), (int) (etape.getY() + newHeight), etape)); // down
+                    newpoints.add(new PointDeControleIG(etape.getX(), (int) (etape.getY() + newHeight / 2), etape)); // left
+                    newpoints.add(new PointDeControleIG((int) (etape.getX() + newWidth), (int) (etape.getY() + newHeight / 2), etape)); // right
+                    etape.setPointsDeControle(newpoints);
+
+                    for (PointDeControleIG pdc : etape.getPointsDeControle()) {
+                        VueMondeIG.this.getChildren().add(new VuePointDeControleIG(pdc, monde));
+                    }
+
+                    // Affichage des clients
+                    HashMap<String, Integer> etapeClients = simulation.getSim().getNbClientsParEtape();
+
+                    int nbClients = etapeClients.getOrDefault(etape.getNom(), 0);
+                    // Find the center coordinates of the HBox inside the vueEtape
+                    double hBoxX = etape.getX() + (newWidth - hBoxWidth) / 2;
+                    double hBoxY = etape.getY() + (newHeight - hBoxHeight) / 3;
+                    double spacing = 20.0;  // Espace horizontal entre les clients
+
+                    Random random = new Random();
+                    double radius = 5.0;
+                    double topPadding = 10.0;
+                    double bottomPadding = 10.0;
+
+                    for (int i = 0; i < nbClients; i++) {
+                        double clientX = hBoxX + radius + (i * spacing);
+
+                        double minX = hBoxX + radius;
+                        double maxX = hBoxX + hBoxWidth - radius;
+                        double minY = hBoxY + topPadding + radius;
+                        double maxY = hBoxY + hBoxHeight + bottomPadding - radius;
+
+                        // Start at vertical center of bouncing zone
+                        double clientY = (minY + maxY) / 2.0;
+
+                        Color randomColor = Color.color(random.nextDouble(), random.nextDouble(), random.nextDouble());
+
+                        Circle client = new Circle(clientX, clientY, radius);
+                        client.setFill(randomColor);
+
+                        VueMondeIG.this.getChildren().add(client);
+                        client.toFront();
+
+                        ClientMover mover = new ClientMover(client, minX, minY, maxX, maxY);
+                        clientMovers.add(mover);
+                    }
+
+
+
+                }
+
+
+
+
             }
-            this.getChildren().add(new_arc);
-        }
 
-        // Dessiner chaque activité
-        for (EtapeIG etape : monde.getEtapes()) {
 
-            // Detect if this is a guichet or an activité
-            VueEtapeIG vueEtape;
-            HBox center;
+        };
 
-            if (etape.estUnGuichet()) {
-                vueEtape = new VueGuichetIG(monde, etape);
-            } else {
-                vueEtape = new VueActiviteIG(monde, etape);
-            }
-
-            center = vueEtape.getCenter();
-
-            double hBoxWidth = center.getPrefWidth();
-            double hBoxHeight = center.getPrefHeight();
-
-            // Calculate dimensions
-            double newWidth = etape.getLargeur();
-            double newHeight = etape.getHauteur();
-
-            if (hBoxWidth > 130) {
-                newWidth += (hBoxWidth - 130) + 2;
-            }
-            if (hBoxHeight > 35) {
-                newHeight += (hBoxHeight - 35) + 5;
-            }
-
-            // Create rectangle
-            Rectangle rect = new Rectangle(etape.getX(), etape.getY(), newWidth, newHeight);
-
-            // Icons
-            Image enter = new Image(getClass().getResourceAsStream("/images/enter.png"), 15, 15, true, true);
-            ImageView enterIcon = new ImageView(enter);
-
-            Image sort = new Image(getClass().getResourceAsStream("/images/exit.png"), 15, 15, true, true);
-            ImageView sortieIcon = new ImageView(sort);
-
-            StackPane iconBox = new StackPane();
-            iconBox.setPrefSize(15, 15);
-            iconBox.setStyle("-fx-background-color: white;");
-            if (etape.estEntree() && (etape.estUneActivite() || etape.estUnGuichet())) {
-                iconBox.getChildren().add(enterIcon);
-            } else if (etape.estSortie() && etape.estUneActivite() ) {
-                iconBox.getChildren().add(sortieIcon);
-            }
-
-            iconBox.setLayoutX(etape.getX() + newWidth - 20);
-            iconBox.setLayoutY(etape.getY() + 2);
-
-            DropShadow shadow = new DropShadow();
-            shadow.setColor(javafx.scene.paint.Color.LIGHTBLUE);
-            shadow.setRadius(10);
-            shadow.setOffsetX(0);
-            shadow.setOffsetY(0);
-
-            rect.setEffect(shadow);
-            iconBox.setEffect(shadow);
-
-            if (monde.getEtapesSelectionnees().contains(etape)) {
-                rect.setStyle("-fx-fill: white; -fx-stroke: red; -fx-stroke-width: 3;");
-            } else {
-                rect.setStyle("-fx-fill: white; -fx-stroke: lightblue; -fx-stroke-width: 2;");
-            }
-
-            rect.setArcWidth(10);
-            rect.setArcHeight(10);
-            rect.setOnMouseClicked((MouseEvent event) -> monde.gererClicEtape(etape));
-            this.getChildren().addAll(rect, iconBox);
-
-            // Centering the VueEtapeIG
-            double centerX = etape.getX() + (newWidth - hBoxWidth) / 2;
-            double centerY = etape.getY() + (newHeight - hBoxHeight) / 3;
-            vueEtape.relocate(centerX, centerY);
-            this.getChildren().add(vueEtape);
-
-            // Points de contrôle
-            ArrayList<PointDeControleIG> newpoints = new ArrayList<>();
-            newpoints.add(new PointDeControleIG((int) (etape.getX() + newWidth / 2), etape.getY(), etape)); // up
-            newpoints.add(new PointDeControleIG((int) (etape.getX() + newWidth / 2), (int) (etape.getY() + newHeight), etape)); // down
-            newpoints.add(new PointDeControleIG(etape.getX(), (int) (etape.getY() + newHeight / 2), etape)); // left
-            newpoints.add(new PointDeControleIG((int)(etape.getX() + newWidth), (int) (etape.getY() + newHeight / 2), etape)); // right
-            etape.setPointsDeControle(newpoints);
-
-            for (PointDeControleIG pdc : etape.getPointsDeControle()) {
-                this.getChildren().add(new VuePointDeControleIG(pdc, monde));
-            }
-        }
-
-        // Affichage des clients
-        HashMap<String, Integer> etapeClients = simulation.getSim().getNbClientsParEtape();
-
-        for (EtapeIG etape : monde.getEtapes()) {
-            int nbClients = etapeClients.getOrDefault(etape.getNom(), 0);
-            double x = etape.getX();
-            double y = etape.getY();
-            double spacing = 20.0;  // Espace horizontal entre les clients
-            for (int i = 0; i < nbClients; i++) {
-                double clientX = x + i * spacing;
-                double clientY = y;
-                Circle client = new Circle(clientX, clientY, 5.0);  // rayon 5
-                client.setFill(Color.GREEN);
-                this.getChildren().add(client);
-
-                // Affichage des coordonnées sur la sortie standard pour déboguer
-                //System.out.println("Client " + i + " à l'étape " + etape.getNom() + " : (" + clientX + ", " + clientY + ")");
-            }
-
+        if (Platform.isFxApplicationThread()) {
+            command.run();
+        } else {
+            Platform.runLater(command);
         }
 
 
     }
-
-
 
 
 }

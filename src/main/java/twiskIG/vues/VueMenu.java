@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import twisk.outils.ThreadsManager;
 import twiskIG.mondeIG.MondeIG;
 
 public class VueMenu extends MenuBar implements Observateur {
@@ -18,7 +19,11 @@ public class VueMenu extends MenuBar implements Observateur {
         MenuItem initialise = new MenuItem("New Monde");
         initialise.setOnAction(event ->monde.supprimerToutesLesEtapes());
         MenuItem quitter = new MenuItem("Quitter");
-        quitter.setOnAction(event -> Platform.exit());
+        quitter.setOnAction(event -> {
+            ThreadsManager.getInstance().detruireTout();
+            Platform.exit();
+        });
+
         menuFichier.getItems().addAll(initialise,quitter);
 
         Menu menuEdition = new Menu("Édition");
