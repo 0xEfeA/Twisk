@@ -62,8 +62,15 @@ public class VueMenu extends MenuBar implements Observateur {
         nbjetons.setOnAction(event->monde.setNbJetons());
 
          parametre.getItems().addAll(delai,ecart,nbjetons);
-
-        this.getMenus().addAll(menuFichier, menuEdition,menuMonde,parametre);
+        Menu loiArrivee = new Menu("Loi arrivee");
+        MenuItem loiUniforme = new MenuItem("Loi uniforme");
+        MenuItem loiGaussienne = new MenuItem("Loi Gaussienne");
+        MenuItem loiExponentiel = new MenuItem("Loi Exponentiel");
+        loiUniforme.setOnAction(event -> monde.setNomLoiArrivee("delaiUniforme"));
+        loiGaussienne.setOnAction(event -> monde.setNomLoiArrivee("delaiGauss"));
+        loiExponentiel.setOnAction(event -> monde.setNomLoiArrivee("delaiExponentiel"));
+        loiArrivee.getItems().addAll(loiUniforme,loiGaussienne,loiExponentiel);
+        this.getMenus().addAll(menuFichier, menuEdition,menuMonde,parametre,loiArrivee);
         this.reagir();
     }
 

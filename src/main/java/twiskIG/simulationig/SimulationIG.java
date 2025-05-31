@@ -15,7 +15,6 @@ public class SimulationIG implements Observateur {
 
     private final Simulation sim;
     private final MondeIG mondeIG;
-
     /**
      * Constructeur
      * @param sim la simulation
@@ -35,7 +34,6 @@ public class SimulationIG implements Observateur {
     public void simuler() throws MondeException {
         verifierMondeIG();
         Monde monde = creerMonde();
-
         System.out.println(mondeIG);
         sim.simuler(monde);
 
@@ -77,6 +75,7 @@ public class SimulationIG implements Observateur {
             Etape etape = corr.get(etapeig);
             if (etapeig.estEntree()) {
                 monde.aCommeEntree(etape);
+               monde.getEntree().setNomFonctionDelai(mondeIG.getNomLoiArrivee());
             }
             if (etapeig.estSortie()) {
                 monde.aCommeSortie(etape);

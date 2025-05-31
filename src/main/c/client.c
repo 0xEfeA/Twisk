@@ -1,5 +1,5 @@
 #include "../ressources/codeC/def.h"
-
+#include "../ressources/codeC/lois.h""
 #define sasEntree 0
 #define sasSortie 5
 #define activiteRestreinte 4

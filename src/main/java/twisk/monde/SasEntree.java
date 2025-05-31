@@ -1,6 +1,7 @@
 package twisk.monde;
 
 import java.text.Normalizer;
+import java.util.Objects;
 
 public class SasEntree extends Activite{
     /**
@@ -9,12 +10,23 @@ public class SasEntree extends Activite{
     public SasEntree() {
         super("sasEntree");
     }
+    private String nomFonctionDelai = null;
 
     @Override
     public String toC() {
         StringBuilder sb = new StringBuilder();
         // entrer(sasEntree); avec #define sasEntree 0
-        sb.append("entrer(").append(genererNomConstante(this.nom)).append(");\n").append("delai(4,2);\n");
+        sb.append("entrer(").append(genererNomConstante(this.nom)).append(");\n");
+        if(Objects.equals(nomFonctionDelai, "delaiUniforme")){
+            sb.append("delaiUniforme(").append("10,4").append(");\n");
+        } else if (Objects.equals(nomFonctionDelai, "delaiGauss")) {
+            sb.append("delaiGauss(").append("10,4").append(");\n");
+            
+        }else if (Objects.equals(nomFonctionDelai, "delaiExponentiel")){
+            sb.append("delaiExponentiel(").append(0.1).append(");\n");
+        } else if (nomFonctionDelai==null) {
+            sb.append("delai(4,2);\n");
+        }
 
         // transfert(sasEntree, successeur);
         for (Etape etape : this.getSuccesseurs()) {
@@ -27,7 +39,9 @@ public class SasEntree extends Activite{
 
         return sb.toString();
     }
-
+    public void setNomFonctionDelai(String nomFonctionDelai) {
+        this.nomFonctionDelai = nomFonctionDelai;
+    }
 
     /**
      * Transforme un nom d'étape en un identifiant valide pour le C.

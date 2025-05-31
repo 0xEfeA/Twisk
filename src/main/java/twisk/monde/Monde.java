@@ -11,7 +11,6 @@ public class Monde implements Iterable<Etape> {
     private final GestionnaireEtapes lesEtapes ;
     private final SasEntree entree;
     private final SasSortie sortie;
-
     /**
      * Constructeur
      */
@@ -148,6 +147,7 @@ public class Monde implements Iterable<Etape> {
     public String toC() {
         StringBuilder sb = new StringBuilder();
         sb.append("#include \"def.h\"\n");
+        sb.append("#include\"lois.h\"\n ");
         sb.append("#define SASENTREE 0 \n")
                 .append("#define SASSORTIE 1\n");
 

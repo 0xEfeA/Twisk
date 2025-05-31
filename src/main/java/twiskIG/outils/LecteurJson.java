@@ -153,7 +153,7 @@ public class LecteurJson {
             PointDeControleIG pointDepart = etapeDepart.getPointsDeControle().get(indiceDepart);
             PointDeControleIG pointArrivee = etapeArrivee.getPointsDeControle().get(indiceArrivee);
             try{
-                mondeIG.ajouter(pointArrivee,pointDepart);
+                mondeIG.ajouter(pointDepart,pointArrivee);
             } catch (ArcImpossibleException e) {
                 throw new RuntimeException(e);
             }

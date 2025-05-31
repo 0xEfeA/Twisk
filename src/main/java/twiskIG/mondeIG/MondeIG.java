@@ -15,7 +15,7 @@ public class MondeIG extends SujetObserve implements Iterable<EtapeIG> {
     private final ArrayList<ArcIG> arcs;
     private final ArrayList<EtapeIG> etapesSelectionnees = new ArrayList<>();
     private final ArrayList<ArcIG> arcsSelectionnes = new ArrayList<>();
-
+    private String nomLoiArrivee;
     /**
      * Constructor: Initializes the world with a default activity.
      */
@@ -25,7 +25,12 @@ public class MondeIG extends SujetObserve implements Iterable<EtapeIG> {
         //this.etapes.put(defaut.getIdentifiant(), defaut);
         this.arcs = new ArrayList<>();
     }
-
+    public void setNomLoiArrivee(String nomLoiArrivee) {
+        this.nomLoiArrivee = nomLoiArrivee;
+    }
+    public String getNomLoiArrivee() {
+        return nomLoiArrivee;
+    }
     /**
      * Adds an Etape to the world.
      * @param type The type of the Etape to be added .
