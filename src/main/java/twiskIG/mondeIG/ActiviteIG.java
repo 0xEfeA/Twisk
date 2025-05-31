@@ -20,6 +20,13 @@ public class ActiviteIG extends EtapeIG {
         this.setDelai(4);
         this.restreinte = false;
     }
+    public ActiviteIG(String nom, int larg, int haut, String id) {
+        super(nom, larg, haut,id);
+        this.estActivite = true;
+        this.setEcart(1);
+        this.setDelai(4);
+        this.restreinte = false;
+    }
     public boolean estUneActiviteRestreinte() {
         return restreinte;
     }

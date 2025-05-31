@@ -44,7 +44,9 @@ public class MondeIG extends SujetObserve implements Iterable<EtapeIG> {
             notifierObservateurs();
         }
     }
-
+    public void ajouterArc(ArcIG arc) {
+        this.arcs.add(arc);
+    }
     /**
      * Returns an iterator to iterate over all the Etapes.
      * @return an iterator for the stored Etapes.
@@ -105,13 +107,47 @@ public class MondeIG extends SujetObserve implements Iterable<EtapeIG> {
             }
         }
 
-
+        if(estAccessibleDepuis(pt1.getEtape(),pt2.getEtape())){
+            throw new ArcImpossibleException("Cet arc créer un circuit");
+        }
         //ajouter l'arc si aucune exception n'a été levée
         arcs.add(new ArcIG(pt1, pt2));
         pt1.getEtape().setSuccesseurs(pt2.getEtape());
         pt2.getEtape().setPredecesseurs(pt1.getEtape());
     }
 
+    /**
+     * Renvoie vrai si candida est accessible depuis la racine
+     * @param candidat etape d'arrivée
+     * @param racine étape de départ
+     * @return Si il existe un chemin entre racine et candidat
+     */
+    public boolean estAccessibleDepuis(EtapeIG candidat, EtapeIG racine) {
+       return estAccessibleRecursif(candidat,racine,new ArrayList<>());
+    }
+
+    /**
+     * Parcours en profondeur pour estAccessibleDepuis
+     * @param candidat
+     * @param racine
+     * @param visite
+     * @return
+     */
+    private  boolean estAccessibleRecursif(EtapeIG candidat, EtapeIG racine,ArrayList<EtapeIG> visite) {
+        if(candidat==racine) {
+            return true;
+        }
+        visite.add(racine);
+        for(EtapeIG succs : racine.getSuccesseurs()){
+            if(!visite.contains(succs)) {
+                boolean accessible = estAccessibleRecursif(candidat,succs,visite);
+                if(accessible) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
     /**
      * Itérateur permettant de parcourir tous les arcs.
      */

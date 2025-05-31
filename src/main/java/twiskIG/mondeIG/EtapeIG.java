@@ -52,6 +52,28 @@ public abstract class EtapeIG implements Iterable<PointDeControleIG> {
         this.ecart = 0;
 
     }
+    public EtapeIG(String nom, int larg, int haut, String identifiant) {
+        this.nom = nom;
+        this.identifiant = identifiant;
+        this.posX = (int) (Math.random() * 500);
+        this.posY = (int) (Math.random() * 500);
+        this.largeur = larg;
+        this.hauteur = haut;
+        this.pointsDeControle = new ArrayList<>();
+        creerPointsDeControle();
+        this.estEntree = false;
+        this.estSortie = false;
+        this.estActivite = false;
+        this.estGuichet = false;
+        this.predecesseurs = new ArrayList<>();
+        this.successeurs = new ArrayList<>();
+        this.estActiviteRestreinte = false;
+        this.nbJetons = 0;
+        this.delai = 0;
+        this.ecart = 0;
+
+    }
+
     public boolean estUneActiviteRestreinte() {
         return false;
     }

@@ -14,6 +14,11 @@ public class GuichetIG extends EtapeIG{
         this.estGuichet = true;
         this.setnbJetons(1);
     }
+    public GuichetIG(String nom, int larg, int haut, String id){
+        super(nom,larg,haut,id);
+        this.estGuichet = true;
+        this.setnbJetons(1);
+    }
     @Override
     public boolean estUnGuichet() {
         return true;

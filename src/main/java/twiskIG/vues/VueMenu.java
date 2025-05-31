@@ -24,7 +24,11 @@ public class VueMenu extends MenuBar implements Observateur {
             Platform.exit();
         });
 
-        menuFichier.getItems().addAll(initialise,quitter);
+        MenuItem sauvegarder = new MenuItem("Sauvegarder");
+        sauvegarder.setOnAction(new EcouteurSauvegarder(monde));
+        MenuItem charger = new MenuItem("Charger");
+        charger.setOnAction(new EcouteurCharger(monde));
+        menuFichier.getItems().addAll(sauvegarder,charger,initialise,quitter);
 
         Menu menuEdition = new Menu("Édition");
         MenuItem supprimer = new MenuItem("Supprimer");
