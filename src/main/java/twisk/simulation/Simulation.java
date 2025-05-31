@@ -13,7 +13,7 @@ import java.util.HashMap;
 
 public class Simulation extends SujetObserve {
     private KitC environnement;
-    private int nbClients = 4 ; // Par défaut on a 3 clients
+    private int nbClients = 10 ; // Par défaut on a 3 clients
     private GestionnaireClients gestionnaireClients;
     private HashMap<String, Integer> nbClientsParEtape = new HashMap<>();
 

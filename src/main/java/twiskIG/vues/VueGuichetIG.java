@@ -2,11 +2,14 @@ package twiskIG.vues;
 
 import javafx.geometry.Insets;
 import javafx.scene.layout.HBox;
+import java.util.ArrayList;
+import java.util.List;
 import twiskIG.mondeIG.EtapeIG;
 import twiskIG.mondeIG.MondeIG;
 import twiskIG.outils.TailleComposants;
 
 public class VueGuichetIG extends VueEtapeIG {
+
     public VueGuichetIG(MondeIG monde, EtapeIG etape) {
         super(monde, etape);
 
@@ -28,4 +31,6 @@ public class VueGuichetIG extends VueEtapeIG {
 
         this.getChildren().add(center);
     }
+
+
 }

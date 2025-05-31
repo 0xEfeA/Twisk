@@ -2,8 +2,8 @@ package twiskIG.mondeIG;
 
 public class GuichetIG extends EtapeIG{
     private int nbJetons;
-    private Boolean versLaDroite;
-    private Boolean sensChoisi;
+    private boolean sensDeplacement = false; // true: left to right; false: right to left
+
     /**
      * Constructor for ActiviteIG.
      * @param nom The name of the guichet.
@@ -14,15 +14,11 @@ public class GuichetIG extends EtapeIG{
         super(nom,larg,haut);
         this.estGuichet = true;
         this.setnbJetons(1);
-        this.versLaDroite = true;
-        this.sensChoisi = false;
     }
     public GuichetIG(String nom, int larg, int haut, String id){
         super(nom,larg,haut,id);
         this.estGuichet = true;
         this.setnbJetons(1);
-        this.versLaDroite = true;
-        this.sensChoisi = false;
     }
     @Override
     public boolean estUnGuichet() {
@@ -40,19 +36,14 @@ public class GuichetIG extends EtapeIG{
         return this.nbJetons;
     }
 
-    public Boolean getVersLaDroite() {
-        return versLaDroite;
+    public void setSensDeplacement(boolean sens) {
+        this.sensDeplacement = sens;
     }
-    public void setVersLaDroite(Boolean versLaDroite) {
-        this.versLaDroite = versLaDroite;
-        setSensChoisi(true);
+
+    public boolean getSensDeplacement() {
+        return this.sensDeplacement;
     }
-    public Boolean getSensChoisi() {
-        return sensChoisi;
-    }
-    public void setSensChoisi(Boolean sensChoisi) {
-        this.sensChoisi = sensChoisi;
-    }
+
 }
 
 
