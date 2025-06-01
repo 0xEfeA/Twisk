@@ -11,6 +11,7 @@ public abstract class Etape implements Iterable<Etape> {
     protected final String nom;
     // Liste des successeurs de cette étape
    private final ArrayList<Etape> successeurs;
+   protected boolean estrestreinte;
 
    // Numéro d'étape
     private final int numero;
@@ -80,6 +81,15 @@ public abstract class Etape implements Iterable<Etape> {
      * @return bolleen
      */
     public abstract boolean estUneActivite();
+
+    public boolean isEstrestreinte() {
+        return estrestreinte;
+    }
+
+    public void setEstrestreinte(boolean estrestreinte) {
+        this.estrestreinte = estrestreinte;
+    }
+
     /**
      * Renvoie si oui ou non, c'est un guichet
      * @return bolleen

@@ -81,10 +81,12 @@ public class VueOutils extends BorderPane implements Observateur {
             simulate.setGraphic(new ImageView(simu2));
             simulate.setOnAction(new EcouteurArretSimulation(monde, simulation));
             Tooltip.install(simulate, new Tooltip("Arrêter la simulation"));
+            reagir();
         } else {
             simulate.setGraphic(new ImageView(simu));
             simulate.setOnAction(new EcouteurSimuler(monde, simulation));
             Tooltip.install(simulate, new Tooltip("Lancer la simulation"));
+            reagir();
         }
     }
 

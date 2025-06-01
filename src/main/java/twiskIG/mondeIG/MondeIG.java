@@ -392,37 +392,44 @@ public class MondeIG extends SujetObserve implements Iterable<EtapeIG> {
         for (EtapeIG etape : etapesCopy) {
             if (etape.estEntree()) {
                 etape.setEntree(false);
-                afficherInfos(String.format("L'étape '%s' n'est plus une entrée", etape.getNom()));
+                afficherInfos(String.format("L'étape '%s' n'est plus une entrée.", etape.getNom()));
             } else if (etape.estSortie()) {
                 etape.setSortie(false);
                 etape.setEntree(true);
-                afficherInfos(String.format("L'étape '%s' est maintenant une entrée", etape.getNom()));
+                afficherInfos(String.format("L'étape '%s' est maintenant une entrée.", etape.getNom()));
             } else {
                 etape.setEntree(true);
-                afficherInfos(String.format("L'étape '%s' est à nouveau une entrée", etape.getNom()));
+                afficherInfos(String.format("L'étape '%s' est à nouveau une entrée.", etape.getNom()));
             }
         }
         notifierObservateurs();
     }
+
 
     public void marquerCommeSortie() {
         ArrayList<EtapeIG> etapesCopy = new ArrayList<>(etapesSelectionnees);
 
         for (EtapeIG etape : etapesCopy) {
+            if (etape.estUnGuichet()) {
+                afficherInfos(String.format("L'étape '%s' est un guichet et ne peut pas être une sortie.", etape.getNom()));
+                continue;
+            }
+
             if (etape.estSortie()) {
                 etape.setSortie(false);
-                afficherInfos(String.format("L'étape '%s' n'est plus une sortie", etape.getNom()));
+                afficherInfos(String.format("L'étape '%s' n'est plus une sortie.", etape.getNom()));
             } else if (etape.estEntree()) {
                 etape.setEntree(false);
                 etape.setSortie(true);
-                afficherInfos(String.format("L'étape '%s' est maintenant une sortie", etape.getNom()));
+                afficherInfos(String.format("L'étape '%s' est maintenant une sortie.", etape.getNom()));
             } else {
                 etape.setSortie(true);
-                afficherInfos(String.format("L'étape '%s' est à nouveau une sortie", etape.getNom()));
+                afficherInfos(String.format("L'étape '%s' est à nouveau une sortie.", etape.getNom()));
             }
         }
         notifierObservateurs();
     }
+
 
 
 

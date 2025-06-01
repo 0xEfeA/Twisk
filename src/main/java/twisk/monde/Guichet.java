@@ -58,6 +58,8 @@ public class Guichet   extends Etape {
         return false;
     }
 
+
+
     @Override
     public boolean estSasEntree() {
         return false;

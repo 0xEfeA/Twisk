@@ -217,8 +217,8 @@ public class VueMondeIG extends Pane implements Observateur {
                             // Start at vertical center of bouncing zone
                             double clientY = (minY + maxY) / 2.0;
 
-                            //Color randomColor = Color.color(random.nextDouble(), random.nextDouble(), random.nextDouble());
-                            Color randomColor = Color.GREEN;
+                            Color randomColor = Color.color(random.nextDouble(), random.nextDouble(), random.nextDouble());
+                            //Color randomColor = Color.GREEN;
 
 
 
@@ -227,6 +227,7 @@ public class VueMondeIG extends Pane implements Observateur {
                             client.setFill(randomColor);
 
                             VueMondeIG.this.getChildren().add(client);
+
                             client.toFront();
 
                             ClientMover mover = new ClientMover(client, minX, minY, maxX, maxY);
@@ -255,8 +256,8 @@ public class VueMondeIG extends Pane implements Observateur {
                         // Draw the clients
                         for (int i = 0; i < nbClients; i++) {
                             // Create the client circle
-                            //Circle client = new Circle(5, Color.color(Math.random(), Math.random(), Math.random()));
-                            Circle client = new Circle(5, Color.GREEN);
+                            Circle client = new Circle(5, Color.color(Math.random(), Math.random(), Math.random()));
+                            //Circle client = new Circle(5, Color.GREEN);
 
 
                             // Place the client circle in the correct slot

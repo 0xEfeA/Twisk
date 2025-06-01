@@ -23,7 +23,7 @@ public class MainTwiskIG extends Application {
         BorderPane root = new BorderPane();
         VueOutils vueOutils = new VueOutils(monde,simulation);
         VueMondeIG vueMondeIG = new VueMondeIG(monde, simulation);
-        VueMenu vueMenu = new VueMenu(monde);
+        VueMenu vueMenu = new VueMenu(monde,simulation);
 
         root.setTop(vueMenu);
         root.setCenter(vueMondeIG);

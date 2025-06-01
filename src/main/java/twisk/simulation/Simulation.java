@@ -13,7 +13,7 @@ import java.util.HashMap;
 
 public class Simulation extends SujetObserve {
     private KitC environnement;
-    private int nbClients = 10 ; // Par défaut on a 3 clients
+    private int nbClients = 3 ; // Par défaut on a 3 clients
     private GestionnaireClients gestionnaireClients;
     private HashMap<String, Integer> nbClientsParEtape = new HashMap<>();
     private int[] tabsimu;
@@ -90,11 +90,15 @@ public class Simulation extends SujetObserve {
                             // Move the client and update counts
                             if (i == 0) {
                                 gestionnaireClients.allerA(pid, monde.getEntree(), j);
+                                ou_sont_les_clients(nbEtapes,nbClients);
+                                Platform.runLater(() -> notifierObservateurs());
                                 nbClientsParEtape.put(
                                         monde.getEntree().getNom(),
                                         nbClientsParEtape.getOrDefault(monde.getEntree().getNom(), 0) + 1
                                 );
                             } else if (i == 1) {
+                                ou_sont_les_clients(nbEtapes,nbClients);
+                                Platform.runLater(() -> notifierObservateurs());
                                 gestionnaireClients.allerA(pid, monde.getSortie(), j);
                                 nbClientsParEtape.put(
                                         monde.getSortie().getNom(),
@@ -105,6 +109,8 @@ public class Simulation extends SujetObserve {
                                 ou_sont_les_clients(nbEtapes,nbClients);
                                 Platform.runLater(() -> notifierObservateurs());
                                 gestionnaireClients.allerA(pid, monde.getEtapeI(i - 2), j);
+                                ou_sont_les_clients(nbEtapes,nbClients);
+                                Platform.runLater(() -> notifierObservateurs());
                                 nbClientsParEtape.put(
                                         nomEtape,
                                         nbClientsParEtape.getOrDefault(nomEtape, 0) + 1
@@ -170,6 +176,7 @@ public class Simulation extends SujetObserve {
             }
         };
         ThreadsManager.getInstance().lancer(task);
+
     }
 
     /**
@@ -190,6 +197,7 @@ public class Simulation extends SujetObserve {
     public native void nettoyage();
 
     public HashMap<String, Integer> getNbClientsParEtape() {
+        Platform.runLater(() -> notifierObservateurs());
         //System.out.println("getNbClientsParEtape() called.");
         //System.out.println("nbClientsParEtape content: " + nbClientsParEtape);
         return nbClientsParEtape;

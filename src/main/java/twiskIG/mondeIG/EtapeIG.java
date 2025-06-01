@@ -74,9 +74,7 @@ public abstract class EtapeIG implements Iterable<PointDeControleIG> {
 
     }
 
-    public boolean estUneActiviteRestreinte() {
-        return false;
-    }
+
 
     public void setnbJetons(int nbJetons) {
         this.nbJetons = nbJetons;
@@ -88,6 +86,11 @@ public abstract class EtapeIG implements Iterable<PointDeControleIG> {
     public void setEstActiviteRestreinte(boolean estActiviteRestreinte) {
         this.estActiviteRestreinte = estActiviteRestreinte;
     }
+
+    public boolean isEstActiviteRestreinte() {
+        return estActiviteRestreinte;
+    }
+
     public boolean estUneActivite() {
         return false;
     }

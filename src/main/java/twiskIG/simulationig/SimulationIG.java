@@ -25,6 +25,7 @@ public class SimulationIG implements Observateur {
     public SimulationIG(Simulation sim, MondeIG mondeIG) {
         this.sim = sim;
         this.mondeIG = mondeIG;
+        setEncoursSimulation(false);
         this.mondeIG.ajouterObservateur(this);
         this.sim.ajouterObservateur(this);
     }
@@ -55,8 +56,9 @@ public class SimulationIG implements Observateur {
         for (EtapeIG etape : mondeIG.getEtapes()) {
             if (etape.estUnGuichet()) {
                 etp = new Guichet(etape.getNom(), etape.getnbJetons());
-            } else if (etape.estUneActiviteRestreinte()) {
+            } else if (etape.isEstActiviteRestreinte()) {
                 etp = new ActiviteRestreinte(etape.getNom(), etape.getDelai(), etape.getEcart());
+                etp.setEstrestreinte(true);
             } else {
                 etp = new Activite(etape.getNom(), etape.getDelai(), etape.getEcart());
             }
@@ -227,6 +229,10 @@ public class SimulationIG implements Observateur {
         sim.killProcesses(sim.getTabsimu());
         setEncoursSimulation(false);
         reagir();
+    }
+
+    public void setNbClients(int nb){
+        sim.setNbClients(nb);
     }
 
 }

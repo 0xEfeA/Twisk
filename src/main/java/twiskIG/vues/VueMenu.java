@@ -1,18 +1,21 @@
 package twiskIG.vues;
 
 import javafx.application.Platform;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.*;
 import twisk.outils.ThreadsManager;
 import twiskIG.mondeIG.MondeIG;
+import twiskIG.simulationig.SimulationIG;
+
+import java.util.Optional;
 
 public class VueMenu extends MenuBar implements Observateur {
     private MondeIG monde;
+    private SimulationIG simulation;
 
-    public VueMenu(MondeIG monde) {
+    public VueMenu(MondeIG monde, SimulationIG sim) {
         this.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
         this.monde = monde;
+        this.simulation = sim;
         this.monde.ajouterObservateur(this);
 
         Menu menuFichier = new Menu("Fichier");
@@ -60,8 +63,29 @@ public class VueMenu extends MenuBar implements Observateur {
          ecart.setOnAction(event->monde.setEcart());
         MenuItem nbjetons = new MenuItem("NbJetons");
         nbjetons.setOnAction(event->monde.setNbJetons());
+        MenuItem nbClients = new MenuItem("NbClients");
+        nbClients.setOnAction(event -> {
+            TextInputDialog dialog = new TextInputDialog();
+            dialog.setTitle("Paramètre - Nombre de clients");
+            dialog.setHeaderText("Définir le nombre de clients pour la simulation");
+            dialog.setContentText("Nombre de clients :");
+            Optional<String> result = dialog.showAndWait();
+            result.ifPresent(input -> {
+                try {
+                    int nbClientsValue = Integer.parseInt(input.trim());
+                    simulation.setNbClients(nbClientsValue);
+                } catch (NumberFormatException e) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Erreur");
+                    alert.setHeaderText("Entrée invalide");
+                    alert.setContentText("Veuillez entrer un nombre entier valide.");
+                    alert.showAndWait();
+                }
+            });
+        });
 
-         parametre.getItems().addAll(delai,ecart,nbjetons);
+        parametre.getItems().addAll(delai, ecart, nbjetons, nbClients);
+
         Menu loiArrivee = new Menu("Loi arrivee");
         MenuItem loiUniforme = new MenuItem("Loi uniforme");
         MenuItem loiGaussienne = new MenuItem("Loi Gaussienne");
