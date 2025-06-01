@@ -1,0 +1,497 @@
+@startuml
+skinparam class {
+   BackgroundColor<<java>> Wheat
+   BorderColor<<java>> Tomato
+}
+
+hide stereotype
+package java{
+
+package twiskIG{
+
+
+      package outils {
+        class FabriqueIdentifiant {
+          int noEtape
+          static FabriqueIdentifiant getInstance()
+          String getIdentifiantEtape()
+        }
+          class ClientMover{
+       - Circle circle;
+    - double dx
+    - double dy
+    - final double minX, minY, maxX, maxY
+    +ClientMover(Circle circle, double minX, double minY, double maxX, double maxY)
+    +void update()
+        }
+
+         class LecteurJson{
+            + static void sauvegarder(MondeIG mondeIG, String fichierChemin)
+            +static MondeIG charger(String fichierChemin)
+
+         }
+         class TailleComposants{
+            -static TailleComposants instance;
+            - double largeurActivite
+    - double hauteurActivite
+
+    - double largeurGuichet
+    - double hauteurGuichet
+            + TailleComposants()
+            +static TailleComposants getInstance()
+            +double getLargeurActivite()
+            +double getLargeurGuichet()
+            +double getHauteurGuichet()
+            +double getHauteurActivite()
+         }
+
+        FabriqueIdentifiant -- "1" FabriqueIdentifiant : static
+      }
+
+
+
+     package vues {
+        interface EventHandler <<java>>
+
+        interface Observateur {
+          +void reagir()
+        }
+
+        class VBox<<java>>
+        class HBox<<java>>
+        class EcouteurBouton
+        class Button<<java>>
+        class TilePane<<java>>
+        class Pane<<java>>
+        class Label<<java>>
+
+        abstract VueEtapeIG extends VBox {
+        -label Label
+        - EtapeIG etape
+        - Hbox center
+        +HBox getCenter()
+          +VueEtapeIG(MondeIG monde, EtapeIG etape)
+        }
+        class VueArcIG extends Pane{
+            - final ArcIG arc
+    - final Line ligne
+    - final Polyline fleche
+    +VueArcIG(ArcIG arc)
+    +void dessinerArc()
+    +void setColor(Color color)
+    + void setArrowColor(Color color)
+
+        }
+        class VueActiviteIG extends VueEtapeIG {
+
+         + VueActiviteIG(MondeIG monde, EtapeIG etape)
+
+        }
+
+        class VueMondeIG implements Observateur {
+          +VueMondeIG(MondeIG monde)
+          +void reagir()
+        }
+
+        class VueOutils implements Observateur {
+       - MondeIG monde
+    - Button addActivity
+    - Button addGuichet
+    - Button simulate
+    - SimulationIG simulation
+         + VueOutils(MondeIG monde)
+          +void reagir()
+          +void setButtonSize(Button button)
+          +void updateSimulationButton()
+        }
+        class VueGuichetIG extends VueEtapeIG{
+        +VueGuichetIG(MondeIG monde, EtapeIG etape)
+
+        }
+        class VuePointDeControleIG extends Circle {
+            -PointDeControleIG point
+            +VuePointDeControleIG(PointDeControleIG point, MondeIG monde)
+
+        }
+        class VueMenu extends MenuBar implements Observateur {
+        -MondeIG monde
+        +VueMenu(MondeIG monde)
+        + void reagir()
+
+        }
+         class EcouteurSimuler implements EventHandler<ActionEvent>{
+       -  MondeIG monde
+    - SimulationIG simulation
+    +EcouteurSimuler(MondeIG monde, SimulationIG simulation)
+         +void handle(ActionEvent actionEvent)
+
+         }
+         class EcouteurSauvegarder implements EventHandler<ActionEvent> {
+         -MondeIG monde
+         +EcouteurSauvegarder(MondeIG monde)
+         +void handle(ActionEvent actionEvent)
+         }
+        class EcouteurCharger implements EventHandler<ActionEvent> {
+        -MondeIG monde
+        + EcouteurCharger(MondeIG monde)
+        +void handle(ActionEvent actionEvent)
+        }
+        class EcouteurBtnAddGuichet implements EventHandler<ActionEvent>{
+        - MondeIG monde
+        +EcouteurBtnAddGuichet(MondeIG monde)
+        +void handle(ActionEvent event)
+
+        }
+        class EcouteurBtnAddActivite implements EventHandler<ActionEvent>{
+           + EcouteurBtnAddActivite(MondeIG monde)
+            + void handle(ActionEvent event)
+        }
+        class EcouteurArretSimulation implements EventHandler<ActionEvent>{
+            -MondeIG monde
+            - SimulationIG simulation
+            +EcouteurArretSimulation(MondeIG monde, SimulationIG simulation)
+            +void handle(ActionEvent actionEvent)
+
+
+        }
+     }
+
+    package exceptions{
+    exception TwiskException extends Exception{
+    }
+    exception ArcImpossibleException extends TwiskException {
+
+    }
+    exception TaskException extends TwiskException {
+    }
+    exception MondeException extends TwiskException{
+
+    }
+    exception IncorrectDelaiEcartException extends TwiskException {
+    }
+    }
+
+    package simulationig{
+        class CorrespondancesEtapes{
+        -HashMap<EtapeIG, Etape> correspondances
+        + CorrespondancesEtapes()
+        +void ajouter(EtapeIG etapeig, Etape etape)
+        +Etape get(EtapeIG etapeig)
+
+        }
+         class SimulationIG implements Observateur{
+            - final Simulation sim
+    - final MondeIG mondeIG
+    - boolean encoursSimulation
+        +SimulationIG(Simulation sim, MondeIG mondeIG)
+        +void simuler() throws MondeException
+        +Monde creerMonde()
+        +void verifierMondeIG() throws MondeException
+        +void setActiviteRestreinte()
+        + boolean verifierEntreeSortie()
+        +boolean verifierGrapheConnecte()
+        +boolean aUneEntree(EtapeIG etape, Set<EtapeIG> parcourus)
+        +boolean aUneSortie(EtapeIG etape, Set<EtapeIG> parcourus)
+        +void reinitialiserSimulation()
+         }
+
+    }
+    class MainTwiskIG extends Application{
+        -SimulationIG simulation
+        void start(Stage primaryStage)
+    }
+     package mondeIG {
+       class SujetObserve {
+         void ajouterObservateur(Observateur v)
+         void notifierObservateurs()
+       }
+
+       class MondeIG extends SujetObserve implements Iterable<EtapeIG>{
+       - HashMap<String, EtapeIG> etapes
+    - final ArrayList<ArcIG> arcs
+    - final ArrayList<EtapeIG> etapesSelectionnees
+    - final ArrayList<ArcIG> arcsSelectionnes
+    - String nomLoiArrivee
+         +MondeIG()
+         +void ajouter(String type)
+         +void setNomLoiArrivee(String nomLoiArrivee)
+         +void ajouter(String type)
+         + void ajouterArc(ArcIG arc)
+         +Iterator<EtapeIG> iterator()
+         +void ajouter(PointDeControleIG pt1, PointDeControleIG pt2)
+         +boolean estAccessibleDepuis(EtapeIG candidat, EtapeIG racine)
+         +void selectionnerPoint(PointDeControleIG point)
+         +void afficherMessageErreur(String message)
+         +void gererClicEtape(EtapeIG etape)
+         +void supprimerToutesLesEtapes()
+         +void marquerCommeEntree()
+         +void marquerCommeSortie()
+       }
+       class PointDeControleIG {
+       -int x
+       -int y
+    - EtapeIG etape
+    + PointDeControleIG(int x, int y, EtapeIG etape)
+    + int getX()
+    + int gety()
+    + void setX(int x)
+    +void setY(int y)
+       }
+
+       abstract class EtapeIG implements Iterable<PointDeControleIG>{
+         -String nom
+         -String identifiant
+         -int posX
+         -int posY
+         -int largeur
+         -int hauteur
+         -bool estEntree
+         -bool estSortie
+         -bool estActivite
+         -ArrayList<EtapeIG> predecesseurs;
+        - ArrayList<EtapeIG> successeurs;
+          - boolean estActiviteRestreinte;
+    - int nbJetons;
+    - int delai;
+    - int ecart;
+         +EtapeIG(String nom, int larg, int haut)
+         +void setPointsDeControle(ArrayList<PointDeControleIG> nouveauxPoints)
+         +ArrayList<PointDeControleIG> getPointsDeControle()
+         +  String getNom()
+         +void setNom(String nom)
+         + ...()
+         + ...()
+        + ...()
+
+
+
+       }
+       class GuichetIG extends EtapeIG{
+         - int nbJetons
+    - boolean sensDeplacement
+        +GuichetIG(String nom, int larg, int haut)
+        +boolean estUnGuichet()
+        +int getNbJetons()
+        +void setnbJetons()
+       }
+        class ArcIG{
+        -PointDeControleIG depart
+        -PointDeControleIG arrivee
+        +ArcIG(PointDeControleIG depart, PointDeControleIG arrivee)
+        +PointDeControleIG getArrivee()
+        +boolean relie(PointDeControleIG p1, PointDeControleIG p2)
+        + void toggleSelection()
+        }
+       class ActiviteIG {
+       -int delai
+       -int ecart
+       -boolean restreinte
+        +estUneActiviteRestreinte()
+         +ActiviteIG(String nom, int larg, int haut)
+         +setEstActiviteRestreinte(boolean estActiviteRestreinte)
+         +int getDelai()
+         +boolean estUneActivite()
+
+       }
+
+       interface Iterable<EtapeIG><<java>>{
+         Iterator<EtapeIG> iterator()
+       }
+     }
+
+
+
+VueEtapeIG --"1" Label
+VueActiviteIG --"1" HBox
+VueMondeIG --|> Pane
+VueOutils --|> TilePane
+VueOutils -- "*" Button
+
+Button -down- "*" EventHandler : "       "
+
+EcouteurBouton ..|> EventHandler
+EcouteurBouton --"1" MondeIG
+
+VueEtapeIG - "1" EtapeIG
+
+
+
+SujetObserve "1"-right "*" Observateur
+
+MondeIG --"*" EtapeIG
+EtapeIG <|-down- ActiviteIG
+
+}
+  package twisk{
+        package monde{
+        class Activite extends Etape{
+            -int temps
+            -int ecartTemps
+            +Activite(String nom)
+            +Activite(String nom, int temps, int ecartTemps)
+            +String toC()
+            +String genererNomConstante(String etape)
+
+
+        }
+        class ActiviteRestreinte extends Activite {
+            +ActiviteRestreinte(String nom, int temps, int ecart)
+
+        }
+        abstract class Etape implements Iterable<Etape> {
+           - final String nom
+           -final ArrayList<Etape> successeurs
+           -final int numero
+           +Etape(String nom)
+           +Iterator<Etape> iterator()
+           +void ajouterSuccesseur(Etape... e)
+           +int nbSuccesseurs()
+           +String toString()
+           +abstract boolean estUneActivite()
+           +abstract boolean estUnGuichet()
+           + ArrayList<Etape> getSuccesseurs()
+           +int getNumeroEtape()
+
+           }
+           class GestionnaireEtapes implements  Iterable<Etape>{
+            -ArrayList<Etape> list_etapes
+            +GestionnaireEtapes()
+            +Iterator<Etape> iterator()
+            +void ajouterEtape()
+            +Etape lastEtape()
+            +Etape getEtapeI(int index)
+            +void  reoganiser(Etape initial)
+            +void parcourirGraphe(Etape etape, ArrayList<Etape> etapesParcourues)
+            +String toString()
+           }
+            class Guichet   extends Etape{
+               - int nbJetons
+                -int numeroSemaphore
+                +Guichet(String nom)
+                +boolean estUneActivite()
+                +String toC()
+                + int getNumeroSemaphore()
+                +String genererNomConstante(String etape)
+
+
+            }
+        class Monde implements Iterable<Etape>{
+            - GestionnaireEtapes lesEtapes
+     - SasEntree entree
+     - SasSortie sortie
+     +Monde()
+     +void aCommeEntree(Etape... etape)
+     +void aCommeSortie(Etape... etape)
+        +GestionnaireEtapes getLesEtapes()
+        +void ajouter(Etape... etape)
+        +int nbGuichet()
+        +ArrayList<Guichet> getGuichets()
+        +String toString()
+        +Iterator<Etape> iterator()
+        +String toC()
+        +String genererNomConstante(String etape)
+
+        }
+        class SasEntree extends Activite{
+            + SasEntree()
+            +String toC()
+            +void setNomFonctionDelai(String nomFonctionDelai)
+            +String genererNomConstante(String etape)
+
+        }
+        class SasSortie extends Activite{
+        +SasSortie()
+        +String toC()
+        }
+
+
+        }
+        package outils{
+        class ClassLoaderPerso extends ClassLoader{
+            +ClassLoaderPerso(ClassLoader parent)
+            +Class<?> getClass(String name)
+            +byte[] loadClassData(String name)
+
+
+        }
+
+            class FabriqueNumero{
+            -static final FabriqueNumero instance = new FabriqueNumero()
+            -int cptEtape
+    - int cptSemaphore
+    +static FabriqueNumero getInstance()
+    +int getNumeroEtape()
+    +int getNumeroSemaphore()
+    +void reset()
+
+            }
+
+            class KitC{
+            + void creerEnvironnement()
+            +void creerFichier(String codeC)
+            +void compiler()
+            +void construireLaBibliotheque()
+            }
+            class ThreadsManager{
+            -static ThreadsManager instance
+            -final List<Thread> threads
+            + ThreadsManager()
+            +static ThreadsManager getInstance()
+            + void lancer(Runnable task)
+            +void detruireTout()
+            }
+
+
+        }
+
+        package simulation{
+            class Client{
+                -int numeroClient
+     -int rang;
+     -Etape etape
+     +Client(int numero)
+     +void allerA(Etape etape , int rang)
+            +int getNumeroClient()
+            +int getRang()
+            +Etape getEtape()
+            }
+
+            class GestionnaireClients  implements Iterable<Client>{
+            -HashMap<Integer,Client> listeClients
+            +GestionnaireClients()
+            +void setClient(int... tabClients)
+            +Iterator<Client> iterator()
+            +void nettoyer()
+            +void allerA(int numeroClient, Etape etape, int rang)
+            +int getNombreClients()
+            +Client getClient(int numeroClient)
+            }
+            class Simulation extends SujetObserve{
+            -KitC environnement;
+    - int nbClients = 10
+    - GestionnaireClients gestionnaireClients
+    - HashMap<String, Integer> nbClientsParEtape
+    - int[] tabsimu
+    + Simulation()
+    + void simulerprint(Monde monde)
+            +void simuler(Monde monde)
+            +HashMap<String, Integer> getNbClientsParEtape()
+            + KitC getEnvironnement()
+            +void killProcesses(int[] pids)
+            +boolean isProcessAlive(int pid)
+            +int[] getTabsimu()
+
+            }
+
+        }
+
+
+
+
+
+
+    }
+        twiskIG -down- twisk
+
+    }
+@enduml
