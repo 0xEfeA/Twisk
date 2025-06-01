@@ -262,62 +262,7 @@ public class MondeIG extends SujetObserve implements Iterable<EtapeIG> {
             });
         }
     }
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
 
-        sb.append("=== MondeIG ===\n");
-        sb.append("Étapes (").append(etapes.size()).append(") :\n");
-        for (EtapeIG e : etapes.values()) {
-            if(e.estEntree){
-                sb.append("Entrée : \n");
-            }if(e.estSortie){
-                sb.append("Sortie : \n");
-            }
-            // Identifiant et type
-            sb.append("  - [")
-                    .append(e.getIdentifiant())
-                    .append("] ");
-            if (e.estUneActivite()) {
-                sb.append("Activité");
-            } else if (e.estUnGuichet()) {
-                sb.append("Guichet");
-            } else {
-                sb.append("Étape inconnue");
-            }
-            // Nom et position
-            sb.append(" «").append(e.getNom()).append("»")
-                    .append(" @(").append(e.getX()).append(",").append(e.getY()).append(")");
-
-            // Paramètres spécifiques
-            if (e.estUneActivite()) {
-                ActiviteIG act = (ActiviteIG) e;
-                sb.append(" [délai=").append(act.getDelai())
-                        .append(", écart=").append(act.getEcart()).append("]");
-            } else if (e.estUnGuichet()) {
-                GuichetIG gu = (GuichetIG) e;
-                sb.append(" [jetons=").append(gu.getNbJetons());
-
-
-                sb.append("]");
-            }
-            sb.append("\n");
-        }
-
-        sb.append("Arcs (").append(arcs.size()).append(") :\n");
-        for (ArcIG arc : arcs) {
-            EtapeIG src = arc.getDepart().getEtape();
-            EtapeIG tgt = arc.getArrivee().getEtape();
-            sb.append("  - ")
-                    .append(src.getIdentifiant())
-                    .append(" → ")
-                    .append(tgt.getIdentifiant());
-            sb.append("\n");
-        }
-
-        sb.append("================\n");
-        return sb.toString();
-    }
 
     /**
      * Function pour retourner un etape grace a son identifiant

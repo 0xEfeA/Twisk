@@ -3,7 +3,7 @@ import javafx.scene.shape.Circle;
 
 import java.util.Random;
 
-public class ClientMover {
+public class    ClientMover {
     public Circle circle;
     private double dx;
     private double dy;

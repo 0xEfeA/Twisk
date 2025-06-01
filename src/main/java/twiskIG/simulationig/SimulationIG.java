@@ -37,7 +37,6 @@ public class SimulationIG implements Observateur {
     public void simuler() throws MondeException {
         verifierMondeIG();
         Monde monde = creerMonde();
-        System.out.println(mondeIG.toString());
         sim.simuler(monde);
         encoursSimulation = true;
         mondeIG.notifierObservateurs();
