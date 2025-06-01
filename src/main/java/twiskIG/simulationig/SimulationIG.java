@@ -1,5 +1,6 @@
 package twiskIG.simulationig;
 
+import javafx.application.Platform;
 import twisk.monde.*;
 import twisk.outils.ThreadsManager;
 import twisk.simulation.Simulation;
@@ -25,7 +26,6 @@ public class SimulationIG implements Observateur {
     public SimulationIG(Simulation sim, MondeIG mondeIG) {
         this.sim = sim;
         this.mondeIG = mondeIG;
-        setEncoursSimulation(false);
         this.mondeIG.ajouterObservateur(this);
         this.sim.ajouterObservateur(this);
     }
@@ -38,7 +38,7 @@ public class SimulationIG implements Observateur {
         verifierMondeIG();
         Monde monde = creerMonde();
         sim.simuler(monde);
-        encoursSimulation = true;
+        setEncoursSimulation(true);
         mondeIG.notifierObservateurs();
     }
 
@@ -220,7 +220,7 @@ public class SimulationIG implements Observateur {
 
     public void setEncoursSimulation(boolean encoursSimulation) {
         this.encoursSimulation = encoursSimulation;
-        sim.notifierObservateurs();
+        mondeIG.notifierObservateurs();
     }
 
     public void reinitialiserSimulation() {

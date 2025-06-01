@@ -163,7 +163,7 @@ public class ClientTwisk_Interactif {
     public static void main(String[] args){
         Monde testworld = initMonde();
         Simulation simulation = new Simulation();
-        simulation.simuler(testworld);
+        //simulation.simuler(testworld);
     }
 
 

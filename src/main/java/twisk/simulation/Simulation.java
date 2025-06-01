@@ -10,12 +10,15 @@ import twiskIG.mondeIG.SujetObserve;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Simulation extends SujetObserve {
     private KitC environnement;
-    private int nbClients = 3 ; // Par défaut on a 3 clients
+    private int nbClients = 5 ; // Par défaut on a 3 clients
     private GestionnaireClients gestionnaireClients;
-    private HashMap<String, Integer> nbClientsParEtape = new HashMap<>();
+    private Map<String, Integer> nbClientsParEtape = new ConcurrentHashMap<>();
+
     private int[] tabsimu;
 
     /**
@@ -77,6 +80,7 @@ public class Simulation extends SujetObserve {
                 while (true) {
                     // Récupération des informations des clients
                     int[] tabclient = ou_sont_les_clients(nbEtapes, nbClients);
+                    //notifierObservateurs();
                     Platform.runLater(() -> notifierObservateurs());
                     // taille de ségment mémoire d'une étape (nbClient + 1 case qui stock le nombre de client en mémoire)
                     int tailleEtapesEnMemoire = nbClients+1;
@@ -90,31 +94,29 @@ public class Simulation extends SujetObserve {
                             // Move the client and update counts
                             if (i == 0) {
                                 gestionnaireClients.allerA(pid, monde.getEntree(), j);
-                                ou_sont_les_clients(nbEtapes,nbClients);
-                                Platform.runLater(() -> notifierObservateurs());
-                                nbClientsParEtape.put(
-                                        monde.getEntree().getNom(),
-                                        nbClientsParEtape.getOrDefault(monde.getEntree().getNom(), 0) + 1
-                                );
+                                synchronized (nbClientsParEtape){
+                                    nbClientsParEtape.put(
+                                            monde.getEntree().getNom(),
+                                            nbClientsParEtape.getOrDefault(monde.getEntree().getNom(), 0) + 1
+                                    );
+                                }
                             } else if (i == 1) {
-                                ou_sont_les_clients(nbEtapes,nbClients);
-                                Platform.runLater(() -> notifierObservateurs());
                                 gestionnaireClients.allerA(pid, monde.getSortie(), j);
-                                nbClientsParEtape.put(
-                                        monde.getSortie().getNom(),
-                                        nbClientsParEtape.getOrDefault(monde.getSortie().getNom(), 0) + 1
-                                );
+                                synchronized (nbClientsParEtape) {
+                                    nbClientsParEtape.put(
+                                            monde.getSortie().getNom(),
+                                            nbClientsParEtape.getOrDefault(monde.getSortie().getNom(), 0) + 1
+                                    );
+                                }
                             } else {
                                 String nomEtape = monde.getNomEtape(i - 2);
-                                ou_sont_les_clients(nbEtapes,nbClients);
-                                Platform.runLater(() -> notifierObservateurs());
                                 gestionnaireClients.allerA(pid, monde.getEtapeI(i - 2), j);
-                                ou_sont_les_clients(nbEtapes,nbClients);
-                                Platform.runLater(() -> notifierObservateurs());
-                                nbClientsParEtape.put(
-                                        nomEtape,
-                                        nbClientsParEtape.getOrDefault(nomEtape, 0) + 1
-                                );
+                                synchronized (nbClientsParEtape) {
+                                    nbClientsParEtape.put(
+                                            nomEtape,
+                                            nbClientsParEtape.getOrDefault(nomEtape, 0) + 1
+                                    );
+                                }
                             }
                         }
                     }
@@ -160,7 +162,7 @@ public class Simulation extends SujetObserve {
                     }
 
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(3000);
                     } catch (InterruptedException e) {
                         break;
                     }
@@ -171,7 +173,7 @@ public class Simulation extends SujetObserve {
                 //notifierObservateurs();
                 System.out.println();
                 System.out.println("Simulation terminée.\n");
-
+                Platform.runLater(() -> notifierObservateurs());
                 return null;
             }
         };
@@ -196,8 +198,7 @@ public class Simulation extends SujetObserve {
     public native int[] ou_sont_les_clients(int nbEtapes, int nbClients);
     public native void nettoyage();
 
-    public HashMap<String, Integer> getNbClientsParEtape() {
-        Platform.runLater(() -> notifierObservateurs());
+    public Map<String, Integer> getNbClientsParEtape() {
         //System.out.println("getNbClientsParEtape() called.");
         //System.out.println("nbClientsParEtape content: " + nbClientsParEtape);
         return nbClientsParEtape;

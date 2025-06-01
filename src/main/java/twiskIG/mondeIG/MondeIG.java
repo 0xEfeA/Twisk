@@ -236,8 +236,8 @@ public class MondeIG extends SujetObserve implements Iterable<EtapeIG> {
     }
 
     public void supprimerToutesLesEtapes() {
-        arcs.clear();
-        etapes.clear();
+        this.getEtapes().clear();
+        this.getArcs().clear();
 
         FabriqueIdentifiant.getInstance().resetIdentifiant();
 

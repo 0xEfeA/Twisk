@@ -95,7 +95,7 @@ public class VueMenu extends MenuBar implements Observateur {
         loiExponentiel.setOnAction(event -> monde.setNomLoiArrivee("delaiExponentiel"));
         loiArrivee.getItems().addAll(loiUniforme,loiGaussienne,loiExponentiel);
         this.getMenus().addAll(menuFichier, menuEdition,menuMonde,parametre,loiArrivee);
-        this.reagir();
+        monde.notifierObservateurs();
     }
 
     @Override

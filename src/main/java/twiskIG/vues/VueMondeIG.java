@@ -23,6 +23,7 @@ import twiskIG.simulationig.SimulationIG;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public class VueMondeIG extends Pane implements Observateur {
@@ -75,7 +76,7 @@ public class VueMondeIG extends Pane implements Observateur {
             event.setDropCompleted(success);
             event.consume();
         });
-        this.reagir();
+        monde.notifierObservateurs();
 
     }
 
@@ -191,7 +192,7 @@ public class VueMondeIG extends Pane implements Observateur {
                     }
 
                     // Affichage des clients
-                    HashMap<String, Integer> etapeClients = simulation.getSim().getNbClientsParEtape();
+                    Map<String, Integer> etapeClients = simulation.getSim().getNbClientsParEtape();
                     int nbClients = etapeClients.getOrDefault(etape.getNom(), 0);
 
 
@@ -264,6 +265,7 @@ public class VueMondeIG extends Pane implements Observateur {
                             HBox slot = (HBox) vueGuichet.getCenter().getChildren().get(index);
                             slot.getChildren().add(client);
                             slot.setAlignment(Pos.CENTER);
+
                             // Move to the next slot based on direction
                             index += step;
                         }

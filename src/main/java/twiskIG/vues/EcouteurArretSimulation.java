@@ -17,7 +17,7 @@ public class EcouteurArretSimulation implements EventHandler<ActionEvent>{
     @Override
     public void handle(ActionEvent actionEvent) {
         simulation.reinitialiserSimulation();
-
+        monde.notifierObservateurs();
     }
 }
 
